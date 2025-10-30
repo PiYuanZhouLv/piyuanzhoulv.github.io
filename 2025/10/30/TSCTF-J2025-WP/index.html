@@ -80,7 +80,7 @@
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-64.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-65.png">
 <meta property="article:published_time" content="2025-10-30T14:52:26.000Z">
-<meta property="article:modified_time" content="2025-10-30T16:43:25.476Z">
+<meta property="article:modified_time" content="2025-10-30T16:56:20.157Z">
 <meta property="article:author" content="圆周率">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://piyuanzhoulv.github.io/image.png">
@@ -303,10 +303,21 @@
 <p>最近会抽空对TSCTF-J2025进行复盘，敬请期待~</p>
 <blockquote>
 <p>不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用</p>
+<p>如果图炸了的话请手动拼接URL，为<span id="urlNow"></span>images-编号.png</p>
 </blockquote>
-<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><h3 id="ab-The-Great"><a href="#ab-The-Great" class="headerlink" title="[ab] The Great"></a>[ab] The Great</h3><p><img src="/image.png" alt="alt text"><br><img src="image-1.png" style="float:right; zoom:0.7"></p>
+<script>
+  document.getElementById("urlNow").innerText = location.href.split('#')[0]
+  document.getElementById("urlNow").innerText += location.href.split('#')[0].slice(-1)==='/'?'':'/'
+</script>
+
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><h3 id="ab-The-Great"><a href="#ab-The-Great" class="headerlink" title="[ab] The Great"></a>[ab] The Great</h3><p><img src="/image.png" alt="alt text"></p>
+<div>
+<img src="image-1.png" style="float:right; zoom:0.7">
+
 <p>这题一开始也是没有思路的，后来放了很多提示，决定好好想一想。</p>
 <p>首先看到提示2，要我们写出音名：</p>
+</div>
+
 <p><img src="/image-2.png" alt="alt text"></p>
 <p>然后add（+）是一个很重要的提示，如果把ABCD……映射为1234……，那么音符就可以相加了，以第二个音为例：</p>
 <p>$$F_{6} + C_{3} &#x3D; I_{9}$$</p>
@@ -572,9 +583,12 @@
 <p><box>flag{3f619a0b_Would_you_say_that_someone_who_had_every_intention_to_be_brave_was_a_coward?_81dd64f3}</box></p>
 <p>注：判断完正误是有回显的，程序会修改NAudio.Midi.dll的前几字节</p>
 <p><img src="/image-57.png" alt="alt text"></p>
+<div>
 <img src="image-58.png" style="float: right">
 
 <p>又注：一开始把注意力放到提取阴乐的地方去了，发现还有一张png图片内嵌了（其实就是应用的图标），在这里放出来，吓💩你们<del>（bushi</del></p>
+</div>
+
 <h3 id="re-Catbits"><a href="#re-Catbits" class="headerlink" title="[re] Catbits"></a>[re] Catbits</h3><p>编程猫逆向？什么玩意儿（丢）</p>
 <p>其实这道题没那么难，只是逻辑不太好找而已，真正逆向很简单</p>
 <p>考虑到大家可能都没有学过编程猫（其实我也没学过），从配置环境开始</p>
@@ -616,7 +630,7 @@
   (new Array(...document.getElementsByTagName('img'))).forEach(
     img=>{
       if(img.src.split('/')[3]!='images'&&!img.src.startsWith(location.href.split("#")[0])){
-          console.log(img.src.split('/').slice(-1))
+          console.log(`${img.src.split('/').slice(-1)}貌似炸了`)
           img.src=img.src.split('/').slice(-1)
         }
     })
