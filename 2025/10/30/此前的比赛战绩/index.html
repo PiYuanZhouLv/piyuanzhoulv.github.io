@@ -107,6 +107,17 @@
         }
       }
     </script>
+    <style>
+      @media screen and (max-width: 1468px) {
+        .hide-on-phone{
+          margin: 0px !important;
+          border-bottom-left-radius: 0px !important;
+          border-top-right-radius: 0px !important;
+          border-top: none !important;
+          border-left: none !important;
+        }
+      }
+    </style>
     
       <div id="header-post">
   <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
@@ -164,13 +175,18 @@
 </div>
 
       <style>
-        @media screen and (max-width: 1468px) {
+        @media screen and (max-width: 630px) {
           .hide-on-phone{
             margin: 0 !important;
             width: 100%;
             border: none !important;
             border-radius: 0 !important;
             border-bottom: gray 1px solid !important;
+          }
+        }
+        @media screen and (max-width: 630px) {
+          #menu{
+            display: none !important;
           }
         }
       </style>
