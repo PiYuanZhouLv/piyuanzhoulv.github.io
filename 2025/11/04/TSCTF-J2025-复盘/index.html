@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 images-编号.png  MiscMeowWord文档的本质是一个ZIP压缩包，所以可以在里面藏东西，把扩展名改为.zip后解压，可以在[Content_Types].xml文件里看到一行注释  提示了base64的">
+    <meta name="description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 images-编号.png     document.getElementById(&quot;urlNow&quot;).innerText &#x3D; location.href.split(&#39;#&#39;)[0]   document.getElem">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TSCTF-J2025 复盘">
 <meta property="og:url" content="https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/index.html">
 <meta property="og:site_name" content="圆周率的废纸堆">
-<meta property="og:description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 images-编号.png  MiscMeowWord文档的本质是一个ZIP压缩包，所以可以在里面藏东西，把扩展名改为.zip后解压，可以在[Content_Types].xml文件里看到一行注释  提示了base64的">
+<meta property="og:description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 images-编号.png     document.getElementById(&quot;urlNow&quot;).innerText &#x3D; location.href.split(&#39;#&#39;)[0]   document.getElem">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-1.png">
@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-7.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-8.png">
 <meta property="article:published_time" content="2025-11-04T04:33:21.000Z">
-<meta property="article:modified_time" content="2025-11-04T08:00:39.666Z">
+<meta property="article:modified_time" content="2025-11-04T08:09:34.893Z">
 <meta property="article:author" content="圆周率">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://piyuanzhoulv.github.io/image.png">
@@ -253,6 +253,11 @@
 <p>如果图炸了的话请手动拼接URL，为</p>
 <p><span id="urlNow"></span>images-编号.png</p>
 </blockquote>
+<script>
+  document.getElementById("urlNow").innerText = location.href.split('#')[0]
+  document.getElementById("urlNow").innerText += location.href.split('#')[0].slice(-1)==='/'?'':'/'
+</script>
+
 <h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="Meow"><a href="#Meow" class="headerlink" title="Meow"></a>Meow</h3><p>Word文档的本质是一个ZIP压缩包，所以可以在里面藏东西，把扩展名改为.zip后解压，可以在<code>[Content_Types].xml</code>文件里看到一行注释</p>
 <p><img src="/image.png" alt="alt text"></p>
 <p>提示了base64的字母表，所以不需要一眼丁真</p>
