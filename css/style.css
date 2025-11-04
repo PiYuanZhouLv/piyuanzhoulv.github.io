@@ -485,12 +485,6 @@ body td {
 }
 /* Scroll bar */
 /* For Firefox */
-.night * {
-  scrollbar-color: #999 transparent;
-}
-.light * {
-  scrollbar-color: #aaa transparent;
-}
 /* For Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 8px;
