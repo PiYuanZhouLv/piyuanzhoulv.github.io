@@ -6,12 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 images-编号.png     document.getElementById(&quot;urlNow&quot;).innerText &#x3D; location.href.split(&#39;#&#39;)[0]   document.getElem">
+    <meta name="description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 image-编号.png     document.getElementById(&quot;urlNow&quot;).innerText &#x3D; location.href.split(&#39;#&#39;)[0]   document.getEleme">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TSCTF-J2025 复盘">
 <meta property="og:url" content="https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/index.html">
 <meta property="og:site_name" content="圆周率的废纸堆">
-<meta property="og:description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 images-编号.png     document.getElementById(&quot;urlNow&quot;).innerText &#x3D; location.href.split(&#39;#&#39;)[0]   document.getElem">
+<meta property="og:description" content="今天下午不想写作业，就来复盘一下TSCTF-J2025吧~  不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用 如果图炸了的话请手动拼接URL，为 image-编号.png     document.getElementById(&quot;urlNow&quot;).innerText &#x3D; location.href.split(&#39;#&#39;)[0]   document.getEleme">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-1.png">
@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-7.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-8.png">
 <meta property="article:published_time" content="2025-11-04T04:33:21.000Z">
-<meta property="article:modified_time" content="2025-11-04T08:09:34.893Z">
+<meta property="article:modified_time" content="2025-11-04T13:36:50.192Z">
 <meta property="article:author" content="圆周率">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://piyuanzhoulv.github.io/image.png">
@@ -214,7 +214,7 @@
     
     <div class="content index py4 ">
         
-          <button onclick="history.back()" style="border: 1px solid; border-radius: 5px; background: none; color: inherit; font-size: 20px; cursor: pointer; width: fit-content; margin-bottom: 10px; font-family: inherit;">&lt; 返回</button>
+          <button onclick="location.href = document.referrer" style="border: 1px solid; border-radius: 5px; background: none; color: inherit; font-size: 20px; cursor: pointer; width: fit-content; margin-bottom: 10px; font-family: inherit;">&lt; 返回</button>
         
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
   <header>
@@ -251,7 +251,7 @@
 <blockquote>
 <p>不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用</p>
 <p>如果图炸了的话请手动拼接URL，为</p>
-<p><span id="urlNow"></span>images-编号.png</p>
+<p><span id="urlNow"></span>image-编号.png</p>
 </blockquote>
 <script>
   document.getElementById("urlNow").innerText = location.href.split('#')[0]
@@ -308,6 +308,60 @@
 </article>
 
 
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Misc"><span class="toc-number">1.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Meow"><span class="toc-number">1.1.</span> <span class="toc-text">Meow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PyJail"><span class="toc-number">1.2.</span> <span class="toc-text">PyJail</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AI"><span class="toc-number">2.</span> <span class="toc-text">AI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JustReverse"><span class="toc-number">2.1.</span> <span class="toc-text">JustReverse</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-number">3.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Druid"><span class="toc-number">3.1.</span> <span class="toc-text">Druid</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse"><span class="toc-number">4.</span> <span class="toc-text">Reverse</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Catbits"><span class="toc-number">4.1.</span> <span class="toc-text">Catbits</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&text=TSCTF-J2025 复盘"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&title=TSCTF-J2025 复盘"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&is_video=false&description=TSCTF-J2025 复盘"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=TSCTF-J2025 复盘&body=Check out this article: https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&title=TSCTF-J2025 复盘"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&title=TSCTF-J2025 复盘"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&title=TSCTF-J2025 复盘"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&title=TSCTF-J2025 复盘"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&name=TSCTF-J2025 复盘&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/2025/11/04/TSCTF-J2025-%E5%A4%8D%E7%9B%98/&t=TSCTF-J2025 复盘"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
 
         
         <footer id="footer">

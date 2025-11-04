@@ -321,7 +321,6 @@ body .h1 {
   display: block;
   margin-top: 3rem;
   margin-bottom: 1rem;
-  color: $color-accent-1;
   letter-spacing: 0.01em;
   font-weight: 700;
   font-style: normal;
@@ -329,32 +328,61 @@ body .h1 {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
+.light body h1,
+.light body .h1 {
+  color: #2bbc8a;
+}
+.night body h1,
+.night body .h1 {
+  color: #2bbc8a;
+}
 body h2,
 body .h2 {
   position: relative;
   display: block;
   margin-top: 2rem;
   margin-bottom: 0.5rem;
-  color: $color-accent-2;
   text-transform: none;
   letter-spacing: normal;
   font-weight: bold;
   font-size: 1rem;
 }
+.light body h2,
+.light body .h2 {
+  color: #383838;
+}
+.night body h2,
+.night body .h2 {
+  color: #eee;
+}
 body h3 {
-  color: $color-accent-2;
   text-decoration: underline;
   font-weight: bold;
   font-size: 0.9rem;
+}
+.light body h3 {
+  color: #383838;
+}
+.night body h3 {
+  color: #eee;
 }
 body h4,
 body h5,
 body h6 {
   display: inline;
   text-decoration: none;
-  color: $color-accent-3;
   font-weight: bold;
   font-size: 0.9rem;
+}
+.light body h4,
+.light body h5,
+.light body h6 {
+  color: #8c8c8c;
+}
+.night body h4,
+.night body h5,
+.night body h6 {
+  color: #ccc;
 }
 body h3,
 body h4,
@@ -364,11 +392,16 @@ body h6 {
   margin-bottom: 0.5rem;
 }
 body hr {
-  border: 0.5px dashed $color-accent-3;
   opacity: 0.5;
   margin: 0;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.light body hr {
+  border: 0.5px dashed #8c8c8c;
+}
+.night body hr {
+  border: 0.5px dashed #ccc;
 }
 body strong {
   font-weight: bold;
@@ -425,10 +458,16 @@ body table {
 }
 body th {
   padding: 8px;
-  border-bottom: 1px dashed $color-border;
-  color: $color-accent-2;
   font-weight: bold;
   font-size: 17px;
+}
+.light body th {
+  border-bottom: 1px dashed #666;
+  color: #383838;
+}
+.night body th {
+  border-bottom: 1px dashed #908d8d;
+  color: #eee;
 }
 body td {
   padding: 0 8px;
@@ -447,10 +486,10 @@ body td {
 /* Scroll bar */
 /* For Firefox */
 .night * {
-  scrollbar-color: $color-scrollbar transparent;
+  scrollbar-color: #999 transparent;
 }
 .light * {
-  scrollbar-color: $color-scrollbar transparent;
+  scrollbar-color: #aaa transparent;
 }
 /* For Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
@@ -805,8 +844,11 @@ body {
 #header-post a.icon {
   background: none;
 }
-#header-post a.icon:hover {
-  color: $color-link;
+.light #header-post a.icon:hover {
+  color: #d480aa;
+}
+.night #header-post a.icon:hover {
+  color: #d480aa;
 }
 #header-post ol {
   list-style-type: none;
@@ -830,16 +872,22 @@ body {
   margin-right: 2rem;
   margin-left: 15px;
 }
-#header-post #menu-icon:hover {
-  color: $color-accent-1;
+.light #header-post #menu-icon:hover {
+  color: #2bbc8a;
+}
+.night #header-post #menu-icon:hover {
+  color: #2bbc8a;
 }
 #header-post #menu-icon-tablet {
   float: right;
   margin-right: 2rem;
   margin-left: 15px;
 }
-#header-post #menu-icon-tablet:hover {
-  color: $color-accent-1;
+.light #header-post #menu-icon-tablet:hover {
+  color: #2bbc8a;
+}
+.night #header-post #menu-icon-tablet:hover {
+  color: #2bbc8a;
 }
 #header-post #top-icon-tablet {
   position: fixed;
@@ -848,38 +896,63 @@ body {
   margin-right: 2rem;
   margin-left: 15px;
 }
-#header-post #top-icon-tablet:hover {
-  color: $color-accent-1;
+.light #header-post #top-icon-tablet:hover {
+  color: #2bbc8a;
 }
-#header-post .active {
-  color: $color-accent-1;
+.night #header-post #top-icon-tablet:hover {
+  color: #2bbc8a;
+}
+#header-post .light .active {
+  color: #2bbc8a;
+}
+#header-post .night .active {
+  color: #2bbc8a;
 }
 #header-post #menu {
   display: none;
   margin-right: 2rem;
 }
 #header-post #nav {
-  color: $color-accent-1;
   letter-spacing: 0.01em;
   font-weight: 200;
   font-style: normal;
   font-size: 0.8rem;
+}
+.light #header-post #nav {
+  color: #2bbc8a;
+}
+.night #header-post #nav {
+  color: #2bbc8a;
 }
 #header-post #nav ul {
   line-height: 15px;
 }
 #header-post #nav ul a {
   margin-right: 15px;
-  color: $color-accent-1;
 }
-#header-post #nav ul a:hover {
-  background-image: linear-gradient(transparent, transparent 5px, $color-accent-1 5px, $color-accent-1);
+.light #header-post #nav ul a {
+  color: #2bbc8a;
+}
+.night #header-post #nav ul a {
+  color: #2bbc8a;
+}
+#header-post #nav ul .light a:hover {
+  background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-#header-post #nav ul li {
-  border-right: 1px dotted $color-accent-1;
+#header-post #nav ul .night a:hover {
+  background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
+  background-position: bottom;
+  background-size: 100% 6px;
+  background-repeat: repeat-x;
+}
+#header-post #nav ul .light li {
+  border-right: 1px dotted #2bbc8a;
+}
+#header-post #nav ul .night li {
+  border-right: 1px dotted #2bbc8a;
 }
 #header-post #nav ul li:last-child {
   margin-right: 0;
@@ -922,19 +995,32 @@ body {
   max-height: calc(95vh - 7rem);
   text-align: right;
 }
-#header-post #toc a:hover {
-  color: $color-link;
+#header-post #toc .light a:hover {
+  color: #d480aa;
+}
+#header-post #toc .night a:hover {
+  color: #d480aa;
 }
 #header-post #toc .toc-level-1 > .toc-link {
   display: none;
 }
 #header-post #toc .toc-level-2 {
-  color: $color-text;
   font-size: 0.8rem;
 }
+.light #header-post #toc .toc-level-2 {
+  color: #383838;
+}
+.night #header-post #toc .toc-level-2 {
+  color: #c9cacc;
+}
 #header-post #toc .toc-level-2:before {
-  color: $color-accent-1;
   content: "#";
+}
+.light #header-post #toc .toc-level-2:before {
+  color: #2bbc8a;
+}
+.night #header-post #toc .toc-level-2:before {
+  color: #2bbc8a;
 }
 #header-post #toc .toc-level-3 {
   font-size: 0.7rem;
@@ -1019,9 +1105,15 @@ body {
   left: 0;
   z-index: 5000000;
   width: 100%;
-  border-top: 1px solid $color-border;
-  background: $color-footer-mobile-1;
   transition: opacity 0.2s;
+}
+.light #footer-post {
+  border-top: 1px solid #666;
+  background: #fafafa;
+}
+.night #footer-post {
+  border-top: 1px solid #908d8d;
+  background: #212326;
 }
 #footer-post a {
   background: none;
@@ -1031,21 +1123,40 @@ body {
 #footer-post a.icon {
   background: none;
 }
-#footer-post a.icon:hover {
-  color: $color-link;
+.light #footer-post a.icon:hover {
+  color: #d480aa;
+}
+.night #footer-post a.icon:hover {
+  color: #d480aa;
 }
 #footer-post #nav-footer {
   padding-right: 1rem;
   padding-left: 1rem;
-  background: $color-footer-mobile-2;
   text-align: center;
 }
+.light #footer-post #nav-footer {
+  background: #e6e6e6;
+}
+.night #footer-post #nav-footer {
+  background: #323539;
+}
 #footer-post #nav-footer a {
-  color: $color-accent-1;
   font-size: 1em;
 }
-#footer-post #nav-footer a:hover {
-  background-image: linear-gradient(transparent, transparent 5px, $color-accent-1 5px, $color-accent-1);
+#footer-post #nav-footer a .light {
+  color: #2bbc8a;
+}
+#footer-post #nav-footer a .night {
+  color: #2bbc8a;
+}
+#footer-post #nav-footer .light a:hover {
+  background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
+  background-position: bottom;
+  background-size: 100% 6px;
+  background-repeat: repeat-x;
+}
+#footer-post #nav-footer .night a:hover {
+  background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
@@ -1076,13 +1187,23 @@ body {
 #footer-post #actions-footer a {
   display: inline-block;
   padding-left: 1rem;
-  color: $color-accent-1;
+}
+#footer-post #actions-footer a .light {
+  color: #2bbc8a;
+}
+#footer-post #actions-footer a .night {
+  color: #2bbc8a;
 }
 #footer-post #share-footer {
   padding-right: 1rem;
   padding-left: 1rem;
-  background: $color-footer-mobile-2;
   text-align: center;
+}
+#footer-post #share-footer .light {
+  background: #e6e6e6;
+}
+#footer-post #share-footer .night {
+  background: #323539;
 }
 #footer-post #share-footer ul {
   display: table;
@@ -1101,8 +1222,13 @@ body {
   clear: both;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  background: $color-footer-mobile-2;
   text-align: left;
+}
+#footer-post #toc-footer .light {
+  background: #e6e6e6;
+}
+#footer-post #toc-footer .night {
+  background: #323539;
 }
 #footer-post #toc-footer ol {
   margin: 0;
@@ -1112,19 +1238,32 @@ body {
 #footer-post #toc-footer ol li {
   line-height: 30px;
 }
-#footer-post #toc-footer a:hover {
-  color: $color-link;
+#footer-post #toc-footer .light a:hover {
+  color: #d480aa;
+}
+#footer-post #toc-footer .night a:hover {
+  color: #d480aa;
 }
 #footer-post #toc-footer .toc-level-1 > .toc-link {
   display: none;
 }
 #footer-post #toc-footer .toc-level-2 {
-  color: $color-text;
   font-size: 0.8rem;
 }
+.light #footer-post #toc-footer .toc-level-2 {
+  color: #383838;
+}
+.night #footer-post #toc-footer .toc-level-2 {
+  color: #c9cacc;
+}
 #footer-post #toc-footer .toc-level-2:before {
-  color: $color-accent-1;
   content: "#";
+}
+.light #footer-post #toc-footer .toc-level-2:before {
+  color: #2bbc8a;
+}
+.night #footer-post #toc-footer .toc-level-2:before {
+  color: #2bbc8a;
 }
 #footer-post #toc-footer .toc-level-3 {
   font-size: 0.7rem;
