@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-3.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-4.png">
 <meta property="article:published_time" content="2025-11-04T11:35:35.000Z">
-<meta property="article:modified_time" content="2026-01-04T16:35:55.896Z">
+<meta property="article:modified_time" content="2026-01-04T16:58:56.047Z">
 <meta property="article:author" content="圆周率">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://piyuanzhoulv.github.io/GIF%202025-11-4%2020-49-48.gif">
@@ -383,7 +383,7 @@
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="quote">&gt; 不知道为什么图片路径可能会炸掉，在最后面写了一个简易的修复代码，不能保证一定有用</span></span><br><span class="line"><span class="quote">&gt; </span></span><br><span class="line"><span class="quote">&gt; 如果图炸了的话请手动拼接URL，为</span></span><br><span class="line"><span class="quote">&gt;</span></span><br><span class="line"><span class="quote">&gt; <span class="language-xml"><span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;urlNow&quot;</span>&gt;</span></span><span class="language-xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span>image-编号.png</span></span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span></span><br><span class="line">  document.getElementById(&quot;urlNow&quot;).innerText = location.href.split(&#x27;#&#x27;)[0]</span><br><span class="line">  document.getElementById(&quot;urlNow&quot;).innerText += location.href.split(&#x27;#&#x27;)[0].slice(-1)===&#x27;/&#x27;?&#x27;&#x27;:&#x27;/&#x27;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
 
 <p>至于为什么是<code>image-编号.png</code>，是因为在VSCode的Markdown编辑器里粘贴图片的默认命名就是这个，还是要以实际为准</p>
-<h2 id="2026-1"><a href="#2026-1" class="headerlink" title="2026.1"></a>2026.1</h2><h3 id="back按钮"><a href="#back按钮" class="headerlink" title="back按钮"></a>back按钮</h3><p>突然像捣腾一下小站了，把back按钮使用sessionStorage存储，这下不至于在同一页的锚点上来回跳了，<br>但是这样的操作成功地往浏览器自己的History里面拉了一坨大的：每次点back会被认为是一次“新页面”</p>
+<h2 id="2026-1"><a href="#2026-1" class="headerlink" title="2026.1"></a>2026.1</h2><h3 id="back按钮"><a href="#back按钮" class="headerlink" title="back按钮"></a>back按钮</h3><p>突然想捣腾一下小站了，把back按钮使用sessionStorage存储，这下不至于在同一页的锚点上来回跳了，<br>但是这样的操作成功地往浏览器自己的History里面拉了一坨大的：每次点back会被认为是一次“新页面”</p>
 <p>综合考虑下，打算给自己的网页加一个FeatureConfig页</p>
 <h3 id="FeatureConfig页"><a href="#FeatureConfig页" class="headerlink" title="FeatureConfig页"></a>FeatureConfig页</h3><p>说搞就搞！</p>
 <p>首先在首页加一个Feature按钮，找到面包条在<code>_partial/header.ejs</code>里生成</p>
