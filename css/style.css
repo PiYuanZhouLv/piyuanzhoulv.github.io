@@ -612,25 +612,25 @@ body {
   color: inherit;
   text-decoration: none;
 }
-.content .night h1 a:hover,
-.content .h1 a:hover,
-.content h2 a:hover,
-.content h3 a:hover,
-.content h4 a:hover,
-.content h5 a:hover,
-.content h6 a:hover {
+.night .content h1 a:hover,
+.night .content .h1 a:hover,
+.night .content h2 a:hover,
+.night .content h3 a:hover,
+.night .content h4 a:hover,
+.night .content h5 a:hover,
+.night .content h6 a:hover {
   background-image: linear-gradient(transparent, transparent 6px, #d480aa 6px, #d480aa);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-.content .light h1 a:hover,
-.content .h1 a:hover,
-.content h2 a:hover,
-.content h3 a:hover,
-.content h4 a:hover,
-.content h5 a:hover,
-.content h6 a:hover {
+.light .content h1 a:hover,
+.light .content .h1 a:hover,
+.light .content h2 a:hover,
+.light .content h3 a:hover,
+.light .content h4 a:hover,
+.light .content h5 a:hover,
+.light .content h6 a:hover {
   background-image: linear-gradient(transparent, transparent 6px, #d480aa 6px, #d480aa);
   background-position: bottom;
   background-size: 100% 6px;
@@ -641,13 +641,13 @@ body {
   color: inherit;
   text-decoration: none;
 }
-.content h6 .night a:hover {
+.night .content h6 a:hover {
   background-image: linear-gradient(transparent, transparent 6px, #d480aa 6px, #d480aa);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-.content h6 .light a:hover {
+.light .content h6 a:hover {
   background-image: linear-gradient(transparent, transparent 6px, #d480aa 6px, #d480aa);
   background-position: bottom;
   background-size: 100% 6px;
@@ -750,13 +750,13 @@ body {
 .light #header #nav ul a {
   color: #2bbc8a;
 }
-#header #nav ul .night a:hover {
+.night #header #nav ul a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-#header #nav ul .light a:hover {
+.light #header #nav ul a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
@@ -896,10 +896,10 @@ body {
 .night #header-post #top-icon-tablet:hover {
   color: #2bbc8a;
 }
-#header-post .light .active {
+.light #header-post .active {
   color: #2bbc8a;
 }
-#header-post .night .active {
+.night #header-post .active {
   color: #2bbc8a;
 }
 #header-post #menu {
@@ -930,22 +930,22 @@ body {
 .night #header-post #nav ul a {
   color: #2bbc8a;
 }
-#header-post #nav ul .light a:hover {
+.light #header-post #nav ul a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-#header-post #nav ul .night a:hover {
+.night #header-post #nav ul a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-#header-post #nav ul .light li {
+.light #header-post #nav ul li {
   border-right: 1px dotted #2bbc8a;
 }
-#header-post #nav ul .night li {
+.night #header-post #nav ul li {
   border-right: 1px dotted #2bbc8a;
 }
 #header-post #nav ul li:last-child {
@@ -989,10 +989,10 @@ body {
   max-height: calc(95vh - 7rem);
   text-align: right;
 }
-#header-post #toc .light a:hover {
+.light #header-post #toc a:hover {
   color: #d480aa;
 }
-#header-post #toc .night a:hover {
+.night #header-post #toc a:hover {
   color: #d480aa;
 }
 #header-post #toc .toc-level-1 > .toc-link {
@@ -1143,13 +1143,13 @@ body {
 #footer-post #nav-footer a .night {
   color: #2bbc8a;
 }
-#footer-post #nav-footer .light a:hover {
+.light #footer-post #nav-footer a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-#footer-post #nav-footer .night a:hover {
+.night #footer-post #nav-footer a:hover {
   background-image: linear-gradient(transparent, transparent 5px, #2bbc8a 5px, #2bbc8a);
   background-position: bottom;
   background-size: 100% 6px;
@@ -1232,10 +1232,10 @@ body {
 #footer-post #toc-footer ol li {
   line-height: 30px;
 }
-#footer-post #toc-footer .light a:hover {
+.light #footer-post #toc-footer a:hover {
   color: #d480aa;
 }
-#footer-post #toc-footer .night a:hover {
+.night #footer-post #toc-footer a:hover {
   color: #d480aa;
 }
 #footer-post #toc-footer .toc-level-1 > .toc-link {
@@ -1429,19 +1429,19 @@ article .content blockquote footer {
 .light article .content blockquote footer {
   color: #666;
 }
-article .content blockquote footer .night a {
+.night article .content blockquote footer a {
   background-image: linear-gradient(transparent, transparent 5px, #908d8d 5px, #908d8d);
   color: #908d8d;
 }
-article .content blockquote footer .light a {
+.light article .content blockquote footer a {
   background-image: linear-gradient(transparent, transparent 5px, #666 5px, #666);
   color: #666;
 }
-article .content blockquote footer .night a:hover {
+.night article .content blockquote footer a:hover {
   background-image: linear-gradient(transparent, transparent 4px, #a6a4a4 4px, #a6a4a4);
   color: #a6a4a4;
 }
-article .content blockquote footer .light a:hover {
+.light article .content blockquote footer a:hover {
   background-image: linear-gradient(transparent, transparent 4px, #858585 4px, #858585);
   color: #858585;
 }
@@ -1605,10 +1605,10 @@ article .content .caption {
 .light #footer a {
   color: #666;
 }
-#footer .night a:hover {
+.night #footer a:hover {
   color: #a6a4a4;
 }
-#footer .light a:hover {
+.light #footer a:hover {
   color: #858585;
 }
 #footer .footer-left {
@@ -1663,10 +1663,10 @@ article .content .caption {
 .pagination a:hover {
   background-image: none;
 }
-.pagination .night a:hover:not(.active) {
+.night .pagination a:hover:not(.active) {
   color: #eee;
 }
-.pagination .light a:hover:not(.active) {
+.light .pagination a:hover:not(.active) {
   color: #383838;
 }
 .search-input {
@@ -1745,10 +1745,10 @@ article .content .caption {
 .light .search-no-result {
   color: #383838;
 }
-#tag-cloud .night .tag-cloud-title {
+.night #tag-cloud .tag-cloud-title {
   color: #908d8d;
 }
-#tag-cloud .light .tag-cloud-title {
+.light #tag-cloud .tag-cloud-title {
   color: #666;
 }
 #tag-cloud .tag-cloud-tags {
@@ -2102,10 +2102,10 @@ code {
   background-size: 100% 6px;
   background-repeat: repeat-x;
 }
-.highlight figcaption .night a:hover {
+.night .highlight figcaption a:hover {
   color: #a6a4a4;
 }
-.highlight figcaption .light a:hover {
+.light .highlight figcaption a:hover {
   color: #919191;
 }
 .highlight figcaption:before,

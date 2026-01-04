@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang=zh class="night" style="font-size: 20px">
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="本站有很多圆周率自己加的史，如果您不想要这些特性，可以在这里修改 注意：本页的选项均使用localStorage存储，请使用支持localStorage的浏览器 正在检测你的浏览器是否支持localStorage……🔎       .unknow{         border: 1px hsla(54, 88%, 24%, 1.00) solid;         color: hsla(54">
+<meta property="og:type" content="website">
+<meta property="og:title" content="特性修改">
+<meta property="og:url" content="https://piyuanzhoulv.github.io/features/index.html">
+<meta property="og:site_name" content="圆周率的废纸堆">
+<meta property="og:description" content="本站有很多圆周率自己加的史，如果您不想要这些特性，可以在这里修改 注意：本页的选项均使用localStorage存储，请使用支持localStorage的浏览器 正在检测你的浏览器是否支持localStorage……🔎       .unknow{         border: 1px hsla(54, 88%, 24%, 1.00) solid;         color: hsla(54">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-04T09:20:11.000Z">
+<meta property="article:modified_time" content="2026-01-04T15:33:52.228Z">
+<meta property="article:author" content="圆周率">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>特性修改</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+  <script>
+    colorScheme = localStorage.getItem('color-scheme') || 'auto';
+    colorScheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+    if(colorScheme==="light"){
+      let classlist = document.querySelector("html").classList;
+      classlist.remove('night');
+      classlist.add('light');
+    }
+    matchMedia('(prefers-color-scheme: dark)').addEventListener("change", ()=>{
+      colorScheme = localStorage.getItem('color-scheme') || 'auto';
+      scheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+      if(scheme==='light'){
+        document.getElementById("sun").style.display = "none"
+        document.getElementById("moon").style.display = ""
+        let classlist = document.querySelector("html").classList
+        classlist.remove('night')
+        classlist.add('light')
+      }else{
+        document.getElementById("sun").style.display = ""
+        document.getElementById("moon").style.display = "none"
+        let classlist = document.querySelector("html").classList
+        classlist.add('night')
+        classlist.remove('light')
+      }
+    })
+  </script>
+  <style>
+    .night img{
+      opacity: 0.8;
+    }
+
+    img{
+      border: 1px solid;
+    }
+  </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr" style="transition: 0.3s;">
+    <a id="extra-logo" class="hide-on-phone" href="/" style="position: fixed; left: 0; top: 0; z-index: 999; margin: 10px; display: flex; align-items: center; text-decoration: none; color: inherit; background: inherit; border: 1px solid; border-radius: 10px; padding-left: 10px; transition: opacity 0.3s;"><img src="/images/logo.png" style="width: 50px; height: 50px; border-radius: 5px;"><h1 class="p-name" style="display: inline; margin: 10px;">圆周率的废纸堆</h1></a>
+    <script>
+      if((localStorage.getItem("extra-logo")||'show')==='none'){
+        document.getElementById("extra-logo").style.display = 'none';
+      }else{
+        document.getElementById("extra-logo").style.display = 'flex';
+      }
+    </script>
+    <div style="position: fixed; right: 0; bottom: 0; z-index: 999; margin: 10px;">
+      <button id="sun" style="border: none; background: none; color:white; cursor: pointer;" onclick="switchColorScheme('light')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg></button>
+      <button id="moon" style="border: none; background: none; color: black; cursor: pointer;" onclick="switchColorScheme('night')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg></button>
+    </div>
+    <script>
+      colorScheme = localStorage.getItem('color-scheme') || 'auto'
+      colorScheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme
+      if(colorScheme==='light'){
+        document.getElementById("sun").style.display = "none"
+        document.getElementById("moon").style.display = ""
+      }else{
+        document.getElementById("sun").style.display = ""
+        document.getElementById("moon").style.display = "none"
+      }
+      function switchColorScheme(scheme){
+        localStorage.setItem("color-scheme", scheme)
+        if(scheme==='light'){
+          document.getElementById("sun").style.display = "none"
+          document.getElementById("moon").style.display = ""
+          let classlist = document.querySelector("html").classList
+          classlist.remove('night')
+          classlist.add('light')
+        }else{
+          document.getElementById("sun").style.display = ""
+          document.getElementById("moon").style.display = "none"
+          let classlist = document.querySelector("html").classList
+          classlist.add('night')
+          classlist.remove('light')
+        }
+      }
+    </script>
+    <script>
+      localStorage = localStorage || {getItem: ()=>(undefined)};
+      if((localStorage.getItem("backbtn-func")||"session")==="session"){
+        function pushHistory(url){
+          let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
+          arr.push(url);
+          sessionStorage.setItem('history', JSON.stringify(arr));
+        }
+        function popHistory(){
+          let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
+          let url = arr.pop() || '/';
+          sessionStorage.setItem('history', JSON.stringify(arr));
+          return url;
+        }
+        if(sessionStorage.getItem('backing')){
+          sessionStorage.removeItem('backing');
+        }else{
+          pushHistory(document.referrer || '/');
+        }
+      }
+    </script>
+    <style>
+      @media screen and (max-width: 1468px) {
+        .hide-on-phone{
+          margin: 0px !important;
+          border-bottom-left-radius: 0px !important;
+          border-top-right-radius: 0px !important;
+          border-top: none !important;
+          border-left: none !important;
+        }
+      }
+    </style>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/features/">特性修改</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/features/index.html"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/features/index.html&text=特性修改"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/features/index.html&is_video=false&description=特性修改"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=特性修改&body=Check out this article: https://piyuanzhoulv.github.io/features/index.html"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/features/index.html&name=特性修改&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/features/index.html&t=特性修改"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%8E-%E6%9A%97%E4%B8%BB%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">明&#x2F;暗主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logo"><span class="toc-number">2.</span> <span class="toc-text">Logo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E6%8C%89%E9%92%AE"><span class="toc-number">3.</span> <span class="toc-text">返回按钮</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+      <style>
+        span#nav {
+          display: none !important;
+        }
+      </style>
+    
+    
+    <div class="content index py4 ">
+        
+          <header id="header">
+  <a class="u-url u-uid" href="/">
+  
+    
+      <img id="logo" alt class="u-logo" src="/images/logo.png" />
+    
+  
+    <div id="title">
+      <h1 class="p-name">圆周率的废纸堆</h1>
+    </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="目录"><i class="fa-solid fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li><a href="/">首页</a></li><!--
+   --><!--
+     --><li><a href="/about/">关于</a></li><!--
+   --><!--
+     --><li><a href="/archives/">归档</a></li><!--
+   --><!--
+     --><li><a href="/features/">特性修改</a></li><!--
+   --><!--
+     --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+          <style>
+            @media screen and (max-width: 1468px) {
+              .hide-on-phone{
+                display: none !important;
+              }
+            }
+          </style>
+          <script>
+            sessionStorage.setItem('history', "[]");
+          </script>
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <div class="content" itemprop="articleBody">
+      
+          <p>本站有很多圆周率自己加的史，如果您不想要这些特性，可以在这里修改</p>
+<p><strong>注意：本页的选项均使用localStorage存储，请使用支持localStorage的浏览器</strong></p>
+<p id="support-storage" class="unknow">正在检测你的浏览器是否支持localStorage……🔎</p>
+
+<style>
+    .unknow{
+        border: 1px hsla(54, 88%, 24%, 1.00) solid;
+        color: hsla(54, 88%, 24%, 1.00);
+        background-color: hsla(54, 90%, 85%, 1.00);
+        border-radius: 5px;
+        padding: 5px;
+        width: fit-content;
+    }
+    .support{
+        border: 1px #077207 solid;
+        color: #077207;
+        background-color: #b4fbb4;
+        border-radius: 5px;
+        padding: 5px;
+        width: fit-content;
+    }
+    .unsupport{
+        border: 1px #720707 solid;
+        color: #720707;
+        background-color: #fbb4b4;
+        border-radius: 5px;
+        padding: 5px;
+        width: fit-content;
+    }
+</style>
+
+<script>
+    function test(){
+        try{
+            localStorage.setItem('test', 'ok');
+            var result = localStorage.getItem('test') == 'ok';
+            localStorage.removeItem('test');
+            return result;
+        }catch(error){
+            console.error(error);
+            return false;
+        }
+    }
+    let result = test();
+    document.getElementById('support-storage').classList.remove('unknow')
+    if(result){
+        document.getElementById('support-storage').innerText = '你的浏览器支持localStorage！🎉🎉🎉'
+        document.getElementById('support-storage').classList.add('support')
+    }else{
+        document.getElementById('support-storage').innerText = '你的浏览器好像不支持localStorage！🤔'
+        document.getElementById('support-storage').classList.add('unsupport')
+    }
+</script>
+
+<h2 id="明-暗主题"><a href="#明-暗主题" class="headerlink" title="明&#x2F;暗主题"></a>明&#x2F;暗主题</h2><fieldset>
+<legend>主题</legend>
+<label style="display: flex"><input name="theme-radio" type="radio" value="auto">跟随系统<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1em;"><path d="M12 21.9967C6.47715 21.9967 2 17.5196 2 11.9967C2 6.47386 6.47715 1.9967 12 1.9967C17.5228 1.9967 22 6.47386 22 11.9967C22 17.5196 17.5228 21.9967 12 21.9967ZM12 19.9967C16.4183 19.9967 20 16.415 20 11.9967C20 7.57843 16.4183 3.9967 12 3.9967C7.58172 3.9967 4 7.57843 4 11.9967C4 16.415 7.58172 19.9967 12 19.9967ZM7.00035 15.316C9.07995 15.1646 11.117 14.2939 12.7071 12.7038C14.2972 11.1137 15.1679 9.07666 15.3193 6.99706C15.6454 7.21408 15.955 7.46642 16.2426 7.75406C18.5858 10.0972 18.5858 13.8962 16.2426 16.2393C13.8995 18.5825 10.1005 18.5825 7.75736 16.2393C7.46971 15.9517 7.21738 15.6421 7.00035 15.316Z"></path></svg><span title="使用媒体查询自动选择" style="text-decoration: underline; text-decoration-style: dotted;">?</span></label>
+<label style="display: flex"><input name="theme-radio" type="radio" value="light">亮<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1em;"><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg></label>
+<label style="display: flex"><input name="theme-radio" type="radio" value="night">暗<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 1em;"><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg></label>
+</fieldset>
+
+<script>
+    var themeSetting = localStorage.getItem('color-scheme') || 'auto';
+    (document.querySelector(`input[name=theme-radio][value=${themeSetting}]`)||document.querySelector('input[name=theme-radio][value=auto]')).checked = true;
+    function switchThemeTo(colorScheme){
+        localStorage.setItem("color-scheme", colorScheme);
+        scheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+        if(scheme==='light'){
+            document.getElementById("sun").style.display = "none";
+            document.getElementById("moon").style.display = "";
+            let classlist = document.querySelector("html").classList;
+            classlist.remove('night');
+            classlist.add('light');
+        }else{
+            document.getElementById("sun").style.display = "";
+            document.getElementById("moon").style.display = "none";
+            let classlist = document.querySelector("html").classList;
+            classlist.add('night');
+            classlist.remove('light');
+        }
+    }
+    document.querySelectorAll('input[name=theme-radio]').forEach((input)=>{
+        input.addEventListener("change", ((input)=>(()=>{
+            switchThemeTo(input.value)
+        }))(input))
+    })
+    document.getElementById("sun").addEventListener("click", ()=>{
+        document.querySelector('input[name=theme-radio][value=light]').checked = true;
+    })
+    document.getElementById("moon").addEventListener("click", ()=>{
+        document.querySelector('input[name=theme-radio][value=night]').checked = true;
+    })
+</script>
+
+<h2 id="Logo"><a href="#Logo" class="headerlink" title="Logo"></a>Logo</h2><fieldset>
+<legend>额外显示Logo</legend>
+<label style="display: flex"><input name="logo-radio" type="radio" value="show">显示额外的 Logo！😜</label>
+<label style="display: flex"><input name="logo-radio" type="radio" value="none">你搞这么花干什么啊😡</label>
+</fieldset>
+
+<script>
+    var logoSetting = localStorage.getItem('extra-logo') || 'show';
+    switchLogoTo(logoSetting);
+    (document.querySelector(`input[name=logo-radio][value=${logoSetting}]`)||document.querySelector('input[name=logo-radio][value=show]')).checked = true;
+    document.getElementById("extra-logo").style.display = 'flex';
+    function switchLogoTo(logo){
+        localStorage.setItem("extra-logo", logo);
+        if(logo==='none'){
+            // document.getElementById("extra-logo").style.display = 'none';
+            document.getElementById("extra-logo").style.opacity = '0';
+        }else{
+            // document.getElementById("extra-logo").style.display = 'flex';
+            document.getElementById("extra-logo").style.opacity = '1';
+        }
+    }
+    document.querySelectorAll('input[name=logo-radio]').forEach((input)=>{
+        input.addEventListener("change", ((input)=>(()=>{
+            switchLogoTo(input.value)
+        }))(input))
+    })
+</script>
+
+<h2 id="返回按钮"><a href="#返回按钮" class="headerlink" title="返回按钮"></a>返回按钮</h2><fieldset>
+<legend>返回按钮逻辑</legend>
+<label style="display: flex"><input name="backbtn-radio" type="radio" value="session">在<code>sessionStorage</code>中记录返回地址</label>
+<label style="display: flex"><input name="backbtn-radio" type="radio" value="referer">使用<code>Referer</code>作为返回地址</label>
+<label style="display: flex"><input name="backbtn-radio" type="radio" value="history">执行<code>history.back()</code></label>
+<label style="display: flex"><input name="backbtn-radio" type="radio" value="none">我不要这些乱七八糟的功能</label>
+<div id="backbtn-explain" style="margin: 10px; border: 1px solid; padding: 5px"></div>
+</fieldset>
+
+<script>
+    var backFunc = localStorage.getItem("backbtn-func") || "session";
+    const backExplain = {
+        session: '<span>使用<code>sessionStorage</code>存储访问过的界面以模拟返回按钮</span><br/><span style="color: red">缺点：会在浏览器自带的History里面拉屎，每点一次都会被当成“前进”</span>',
+        referer: '<span>使用<code>document.referer</code>作为返回目标</span><br/><span style="color: red">缺点：只能返回一层，若使用了“上一篇”/“下一篇”等功能就会在两个页面来回跳</span>',
+        history: '<span>使用<code>History API</code>，与浏览器回退按钮功能一致</span><br/><span style="color: red">缺点：锚点会被当成返回点，使用过目录功能后会在同一个页面上跳来跳去</span>',
+        none: '<span style="color: red">解决问题的终极方法就是解决提出问题的人/事！</span>'
+    }
+    function backChoose(opt){
+        (document.querySelector(`input[name=backbtn-radio][value=${opt}]`)||document.querySelector('input[name=backbtn-radio][value=session]')).checked = true;
+        document.getElementById("backbtn-explain").innerHTML = backExplain[opt] || backExplain['session'];
+    }
+    backChoose(backFunc);
+    function switchBackTo(opt){
+        localStorage.setItem("backbtn-func", opt);
+        document.getElementById("backbtn-explain").innerHTML = backExplain[opt] || backExplain['session'];
+    }
+    document.querySelectorAll('input[name=backbtn-radio]').forEach((input)=>{
+        input.addEventListener("change", ((input)=>(()=>{
+            switchBackTo(input.value)
+        }))(input))
+    })
+</script>
+        
+  </div>
+</article>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/features/">特性修改</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%98%8E-%E6%9A%97%E4%B8%BB%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">明&#x2F;暗主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logo"><span class="toc-number">2.</span> <span class="toc-text">Logo</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%94%E5%9B%9E%E6%8C%89%E9%92%AE"><span class="toc-number">3.</span> <span class="toc-text">返回按钮</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/features/index.html"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/features/index.html&text=特性修改"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/features/index.html&is_video=false&description=特性修改"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=特性修改&body=Check out this article: https://piyuanzhoulv.github.io/features/index.html"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/features/index.html&title=特性修改"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/features/index.html&name=特性修改&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/features/index.html&t=特性修改"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025-2026
+    圆周率
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/features/">特性修改</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
