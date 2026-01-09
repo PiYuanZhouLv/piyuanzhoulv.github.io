@@ -1948,7 +1948,7 @@
                     if (!lotteryCountData.fullTime || typeof lotteryCountData.fullTime !== "number") {
                         throw new Error("Fulltime not found or invalid");
                     }
-                    lotteryCountData.fullTime = Date.now() > lotteryCountData.fullTime ? Date.now() : lotteryCountData.fullTime;
+                    lotteryCountData.fullTime = Math.max(Date.now(), lotteryCountData.fullTime);
                 } catch (e) {
                     console.error("加载抽奖次数数据失败:", e);
                     // 初始化新格式数据
@@ -1987,6 +1987,7 @@
             const fullTime = lotteryCountData.fullTime;
 
             if (now >= fullTime) {
+                lotteryCountData.fullTime = now;
                 // 已满
                 return MAX_COUNT;
             } else {
@@ -2063,6 +2064,7 @@
             const currentCount = calculateCurrentCount();
             if (currentCount >= count) {
                 // 增加回满时间
+                lotteryCountData.fullTime = Math.max(lotteryCountData.fullTime, Date.now());
                 lotteryCountData.fullTime += count * RECOVERY_INTERVAL;
                 saveLotteryCountData();
                 updateCountDisplay();
@@ -2798,7 +2800,7 @@
                         renderCollectionPage();
                         updateProgressBars();
                         lotteryCountData = importedCount;
-                        lotteryCountData.fullTime = Date.now() > lotteryCountData.fullTime ? Date.now() : lotteryCountData.fullTime;
+                        lotteryCountData.fullTime = Math.max(Date.now(), lotteryCountData.fullTime);
                         saveLotteryCountData();
                         showToast('数据导入成功！', 'success');
                     }
