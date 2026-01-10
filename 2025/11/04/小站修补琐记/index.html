@@ -21,8 +21,9 @@
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-2.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-3.png">
 <meta property="og:image" content="https://piyuanzhoulv.github.io/image-4.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-5.png">
 <meta property="article:published_time" content="2025-11-04T11:35:35.000Z">
-<meta property="article:modified_time" content="2026-01-09T21:31:59.726Z">
+<meta property="article:modified_time" content="2026-01-10T12:41:47.782Z">
 <meta property="article:author" content="圆周率">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://piyuanzhoulv.github.io/GIF%202025-11-4%2020-49-48.gif">
@@ -415,11 +416,28 @@
 <p>这个抽奖机拥抱AI，因为我实在不想写前端了！用的D老师，效果还不错~</p>
 <p>快去<a href="/friends/">抽友链</a>吧！</p>
 <p>对了，把D老师之前几版也放一下，下面的都是D老师根据提示词自己写出来的~</p>
+<style>
+    details {
+        border: 1px solid;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    details:open summary {
+        border-bottom: 1px solid;
+    }
+</style>
+
 <ul>
-<li><a href="/friends/draft/ds_v1.html">V1</a> -&gt; 最原始的简单提示词，看起来不错，就是AI味太大了</li>
-<li><a href="/friends/draft/ds_v2.html">V2</a> -&gt; 让D老师接受我的“现代”审美，至少AI味没有那么大了</li>
-<li><a href="/friends/draft/ds_v3.html">V3</a> -&gt; 从V2的提示词进一步修改，最终版就是从这版上改的</li>
+<li><a href="/friends/draft/ds_v1.html">V1</a> -&gt; 最原始的简单提示词，看起来不错，就是AI味太大了<details><summary>提示词</summary>我想给我的博客写一个“友链抽奖机”，有一张类似牌的元素初始展示背面，点击后3D快速旋转，每转一圈随机一个友链（包括方形图片+大字名称+小字描述+加粗网址），每个友链有几种不同“品质”随机出现，用不同背景、前景色效果展示（比如默认、蓝、绿、金、红），旋转由快到慢，最后停在某个品质的友链上后就向localStorage存储一下，记录抽到了哪些友链及品质，再写一个展示抽到的友链的页面，以友链 分，显示抽到的最高品质的颜色，点击后弹出浮层，显示友链详情和抽到过的品质列表及数量，未抽中的留灰色占位，最后给出一个作弊按钮用来一键解锁所有基础友链。友链数据记录在JS对象中，可能随时间更改，编写代码时请注意这一点</details></li>
+<li><a href="/friends/draft/ds_v2.html">V2</a> -&gt; 让D老师接受我的“现代”审美，至少AI味没有那么大了<details><summary>提示词</summary>我想给我的博客写一个“友链抽奖机”，有一张类似牌的元素初始展示背面，点击后3D快速旋转，每转一圈随机一个友链（包括方形图片+大字名称+小字描述+加粗网址），每个友链都有五种不同“品质”随机出现，用不同背景、前景色效果展示（比如默认、绿、蓝、金、红），旋转由快匀速变慢，每次背面朝外时随机刷新背面的友链和品质，最后停在某个品质的友链上后就向localStorage存储一下，记录抽到了哪些友链及品质，再写一个展示抽到的友链的页面，以友链分，显示与抽取的卡片类似，颜色选抽到的最高品质的颜色，未抽中则为灰色，并显示？？？，根据品质、数量降序排列，并有各品质收集进度，有复选框来决定是否显示未抽中的，有一个搜索的功能（未抽中的也按名称参与，但仍显示？？？），给出一个作弊按钮“一键解锁”用来给未抽中过的友链添加一个普通品质，添加导入导出功能。最后给出一个danger的删除数据按钮。友链数据记录在JS对象中，可能随时间更改，编写代码时请注意这一点。尽可能用默认值来兼容上下文样式，并且除了卡牌、品质等适合使用圆角矩形的地方，尽可能采用尖角矩形、非渐变，按钮强调下缘的简约风格</details></li>
+<li><a href="/friends/draft/ds_v3.html">V3</a> -&gt; 从V2的提示词进一步修改，最终版就是从这版上改的<details><summary>提示词</summary>我想给我的博客写一个“友链抽奖机”，有一张类似牌的元素初始展示背面，点击后3D快速旋转，每转一圈随机一个友链（包括方形图片+大字名称+小字描述+加粗网址），每个友链都有五种不同“品质”随机出现，用不同背景、前景色效果展示（比如默认、绿、蓝、金、红），旋转由快匀速变慢，每次背面朝外时随机刷新背面的友链和品质，用JS实现，最后停在某个品质的友链上后就向localStorage存储一下，记录抽到了哪些友链及品质，再写一个展示抽到的友链的页面，以友链分，显示与抽取的卡片类似，颜色选抽到的最高品质的颜色，未抽中则为灰色，并显示？？？，根据品质、数量降序排列，并有各品质收集进度，有复选框来决定是否显示未抽中的，有一个搜索的功能（未抽中的也按名称参与，但仍显示？？？），给出一个作弊按钮“一键解锁”用来给未抽中过的友链添加一个普通品质，添加导入导出功能，点击后弹出浮层，左侧是较大的头像，右上是标题、说明、链接，若超出则显示滚动条，右下留一小条背景稍不同，用倾斜圆角矩形和对应颜色表示某种品质的牌，矩形里数字代表抽到的次数（注意2位数以上字体大小），若未抽到对应品质则背景为灰色、标0，矩形下方给出品质名称，注意间距。最后给出一个danger的删除数据按钮。友链数据记录在JS对象中，可能随时间更改，编写代码时请注意这一点。两个页面写在一起。我像把它加到已有的界面中，尽可能用默认值来兼容上下文样式，并且除了卡牌、品质等适合使用圆角矩形的地方，尽可能采用尖角矩形、非渐变，按钮强调下缘的简约风格</details></li>
 </ul>
+<p>基于V3，通过反复向D老师提要求+自己修，慢慢地完成了这个“浩大工程”</p>
+<p><img src="/image-5.png" alt="alt text"></p>
+<p>（完全想象不出来自己写这么大托需要多久，我上一个纯手写的HTML前端只有798行41297字符）</p>
+<p>不过D老师还不是万能的，比如旋转动画写不出来，偶尔听不懂人话（不过不排除是上下文过大导致的），最后修改还得是我来做</p>
+<p><span style="background-color: currentColor">听说GPT、Gemini效果很好，不知道长城外的AI怎么样呢？</span></p>
 <script>
     // 修复图炸的情况
     (new Array(...document.getElementsByTagName('img'))).forEach(
