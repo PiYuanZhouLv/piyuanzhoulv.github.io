@@ -1528,6 +1528,9 @@
                 <div class="count-subtitle">
                     下次恢复时间: <span id="next-recovery">0分0秒</span>
                 </div>
+                <div class="count-subtitle">
+                    完全恢复时间: <span id="full-recovery">0时0分0秒</span>
+                </div>
                 <div class="count-subtitle" id="recovery-rate">
                     每5分钟恢复1次抽奖机会
                 </div>
@@ -1646,6 +1649,8 @@
     <!-- 导入数据输入框 -->
     <input type="file" id="import-file" style="display: none;" accept=".json">
 
+    <div style="height: 60px;"></div>
+
     <script>
         // 在 friends 数组中添加 id 字段
         const friends = [
@@ -1728,6 +1733,7 @@
         const currentCountSpan = document.getElementById('current-count');
         const maxCountSpan = document.getElementById('max-count');
         const nextRecoverySpan = document.getElementById('next-recovery');
+        const fullRecoverySpan = document.getElementById('full-recovery');
         const recoveryRateSpan = document.getElementById('recovery-rate');
         const navProgressText = document.getElementById('nav-progress-text');
         const navProgressFill = document.getElementById('nav-progress-fill');
@@ -2032,10 +2038,20 @@
                 const minutes = Math.floor(remainingTime / 60000);
                 const seconds = Math.floor((remainingTime % 60000) / 1000);
 
-                nextRecoverySpan.textContent = `${minutes}分${seconds}秒`;
+                nextRecoverySpan.textContent = `${minutes}分${seconds.toString().padStart(2, '0')}秒`;
                 navNextRecovery.textContent = `恢复: ${minutes}分${seconds}秒`;
+                let remainingTimeFull = Math.floor((fullTime - now) / 1000);
+                fullRecoverySpan.textContent = '';
+                for(let [i, j, k] of [['秒', 60, 2], ['分', 60, 2], ['时', 24, 0], ['天', undefined, undefined]]){
+                    fullRecoverySpan.textContent = (j?`${(remainingTimeFull%j).toString().padStart(k, '0')}${i}`:`${remainingTimeFull}${i}`) + fullRecoverySpan.textContent;
+                    remainingTimeFull = Math.floor(remainingTimeFull / j);
+                    if(!remainingTimeFull){
+                        break;
+                    }
+                }
             } else {
                 nextRecoverySpan.textContent = "已满";
+                fullRecoverySpan.textContent = "已满";
                 navNextRecovery.textContent = "已满";
             }
 
