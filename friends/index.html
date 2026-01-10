@@ -931,7 +931,7 @@
             color: white;
             font-weight: 500;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-out 2.7s forwards;
+            animation: slideIn 0.3s ease-out forwards;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -989,16 +989,6 @@
             to {
                 opacity: 0;
                 transform: translateX(100%);
-            }
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-
-            to {
-                opacity: 0;
             }
         }
 
@@ -2042,10 +2032,10 @@
                 navNextRecovery.textContent = `恢复: ${minutes}分${seconds}秒`;
                 let remainingTimeFull = Math.floor((fullTime - now) / 1000);
                 fullRecoverySpan.textContent = '';
-                for(let [i, j, k] of [['秒', 60, 2], ['分', 60, 2], ['时', 24, 0], ['天', undefined, undefined]]){
-                    fullRecoverySpan.textContent = (j?`${(remainingTimeFull%j).toString().padStart(k, '0')}${i}`:`${remainingTimeFull}${i}`) + fullRecoverySpan.textContent;
+                for (let [i, j, k] of [['秒', 60, 2], ['分', 60, 2], ['时', 24, 0], ['天', undefined, undefined]]) {
+                    fullRecoverySpan.textContent = (j ? `${(remainingTimeFull % j).toString().padStart(k, '0')}${i}` : `${remainingTimeFull}${i}`) + fullRecoverySpan.textContent;
                     remainingTimeFull = Math.floor(remainingTimeFull / j);
-                    if(!remainingTimeFull){
+                    if (!remainingTimeFull) {
                         break;
                     }
                 }
@@ -2096,9 +2086,6 @@
             loadLotteryCountData();
             setupEventListeners();
 
-            // 预加载图片
-            await preloadImages();
-
             // 渲染页面
             renderCollectionPage();
             updateProgressBars();
@@ -2106,6 +2093,15 @@
 
             // 设置定时器更新显示
             setInterval(updateCountDisplay, 1000);
+
+            // 检查URL锚点并切换到对应页面
+            const hash = window.location.hash.substring(1); // 去掉#号
+            if (hash === 'lottery' || hash === 'collection') {
+                switchPage(hash);
+            }
+
+            // 预加载图片
+            await preloadImages();
         }
 
         // 设置事件监听器
@@ -2155,6 +2151,9 @@
 
         // 切换页面
         function switchPage(page) {
+            // 更新URL锚点
+            window.location.hash = page;
+
             // 更新标签按钮状态
             tabButtons.forEach(btn => {
                 if (btn.getAttribute('data-page') === page) {
@@ -2406,6 +2405,10 @@
 
             // 显示弹窗
             batchModalOverlay.classList.add('active');
+            // 确保弹窗内容滚动到顶部
+            setTimeout(() => {
+                document.querySelector('.batch-modal-content').scrollTop = 0;
+            }, 10);
 
             // 显示提示消息
             if (totalRare >= 3) {
@@ -2745,6 +2748,11 @@
 
             // 显示弹窗
             modalOverlay.classList.add('active');
+            // 确保弹窗内容滚动到顶部
+            setTimeout(() => {
+                document.querySelector('.modal-content').scrollTop = 0;
+                document.querySelector('.modal').scrollTop = 0;
+            }, 10);
         }
 
         // 关闭弹窗
