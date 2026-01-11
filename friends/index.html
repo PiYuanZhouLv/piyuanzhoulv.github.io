@@ -2982,6 +2982,8 @@
 
                     if (result) {
                         collectionData = importedData;
+                        collectionData.friendIds = collectionData.friendIds || [];
+                        collectionData.allCollected = collectionData.allCollected || false;
                         saveCollectionData();
                         renderCollectionPage();
                         updateProgressBars();
