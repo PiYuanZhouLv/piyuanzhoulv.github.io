@@ -2989,6 +2989,7 @@
                         lotteryCountData.fullTime = Math.max(Date.now(), lotteryCountData.fullTime);
                         saveLotteryCountData();
                         showToast('数据导入成功！', 'success');
+                        showFriendDiff();
                     }
                 } catch (error) {
                     showToast('导入失败：数据格式不正确', 'error');
