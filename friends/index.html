@@ -336,6 +336,10 @@
             font-weight: bold;
             margin-bottom: 10px;
             text-align: center;
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-desc {
@@ -345,6 +349,15 @@
             min-height: 48px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .card-desc>div {
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* URL容器样式 - 修改部分 */
@@ -621,17 +634,24 @@
 
         .friend-info {
             flex: 1;
+            max-width: calc(100% - 80px);
         }
 
         .friend-name {
             font-size: 20px;
             font-weight: bold;
             margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .friend-desc {
             font-size: 14px;
             color: var(--color-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* 模态框中的URL容器 */
@@ -651,7 +671,6 @@
             padding: 12px;
             background-color: var(--color-background-2);
             overflow: hidden;
-            text-overflow: ellipsis;
             white-space: nowrap;
             border: 1px solid var(--color-button-border);
             border-radius: 5px;
@@ -1101,6 +1120,10 @@
             font-size: 14px;
             position: relative;
             z-index: 1;
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .batch-quality {
@@ -1396,6 +1419,24 @@
                 transform: rotate(360deg);
             }
         }
+
+        .scroll-no-bar {
+            /* 隐藏滚动条 */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE 和 Edge */
+        }
+
+        /* Webkit 浏览器 */
+        .scroll-no-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 确保内容可滚动 */
+        .scroll-no-bar {
+            overflow: scroll;
+        }
     </style>
 </head>
 
@@ -1496,7 +1537,9 @@
                     <div class="card-face card-back quality-default" id="card-back">
                         <img class="card-image" id="card-img" src="" alt="" loading="lazy">
                         <div class="card-name" id="card-name"></div>
-                        <div class="card-desc" id="card-desc"></div>
+                        <div class="card-desc">
+                            <div id="card-desc"></div>
+                        </div>
                         <div class="url-container" id="card-url-container">
                             <!-- URL内容将通过JS动态生成 -->
                         </div>
@@ -1520,6 +1563,9 @@
                 </div>
                 <div class="count-subtitle">
                     完全恢复时间: <span id="full-recovery">0时0分0秒</span>
+                </div>
+                <div class="count-subtitle">
+                    完全恢复在: <span id="full-recovery-at">HH:MM:SS(+1)</span>
                 </div>
                 <div class="count-subtitle" id="recovery-rate">
                     每5分钟恢复1次抽奖机会
@@ -1644,7 +1690,7 @@
     <script>
         // 在 friends 数组中添加 id 字段
         const friends = [
-            { id: 0, name: "技术博客", url: "https://techblog.example.com", avatar: "https://picsum.photos/id/0/200/200", description: "分享编程技术和开发经验" },
+            { id: 0, name: "技术博客，但是博客名字特别特别特别特别特别特别特别特别特别特别特别特别特别特别特别特别特别特别长", url: "https://techblog.example.com/test/for/a/long/long/long/long/long/long/url", avatar: "https://picsum.photos/id/0/200/200", description: "分享编程技术和开发经验，但是我需要测试特别特别特别特别特别特别特别特别特别长的介绍" },
             { id: 1, name: "设计笔记", url: "https://designnotes.example.com", avatar: "https://picsum.photos/id/1/200/200", description: "UI/UX设计心得与资源" },
             { id: 2, name: "旅行日志", url: "https://travelog.example.com", avatar: "https://picsum.photos/id/10/200/200", description: "记录世界各地的旅行见闻" },
             { id: 3, name: "美食日记", url: "https://foodiary.example.com", avatar: "https://picsum.photos/id/20/200/200", description: "探索与分享美食文化" },
@@ -1724,6 +1770,7 @@
         const maxCountSpan = document.getElementById('max-count');
         const nextRecoverySpan = document.getElementById('next-recovery');
         const fullRecoverySpan = document.getElementById('full-recovery');
+        const fullRecoveryAtSpan = document.getElementById('full-recovery-at');
         const recoveryRateSpan = document.getElementById('recovery-rate');
         const navProgressText = document.getElementById('nav-progress-text');
         const navProgressFill = document.getElementById('nav-progress-fill');
@@ -1858,6 +1905,55 @@
             });
         }
 
+        // 提示弹窗函数，借用确认弹窗
+        function showAlert(message, title = '提示', icon = 'ⓘ', button = '确认', options = {}) {
+            return new Promise((resolve) => {
+                // 设置弹窗内容
+                confirmTitle.textContent = title;
+                confirmMessage.textContent = message;
+                confirmIcon.textContent = icon;
+                confirmOk.textContent = button;
+                confirmCancel.style.display = 'none';
+
+                // 设置图标
+                if (options.danger) {
+                    confirmIcon.style.color = 'var(--color-danger)';
+                    confirmOk.classList.add('button-danger');
+                } else {
+                    confirmIcon.style.color = 'var(--color-info)';
+                    confirmOk.classList.remove('button-danger');
+                }
+
+                // 显示弹窗
+                confirmModalOverlay.classList.add('active');
+
+                // 设置按钮事件
+                const handleClose = () => {
+                    cleanup();
+                    resolve();
+                };
+
+                const handleOverlayClick = (e) => {
+                    if (e.target === confirmModalOverlay) {
+                        handleClose();
+                    }
+                };
+
+                // 清理事件监听器
+                const cleanup = () => {
+                    confirmOk.removeEventListener('click', handleClose);
+                    confirmModalOverlay.removeEventListener('click', handleOverlayClick);
+                    confirmModalOverlay.classList.remove('active');
+                    confirmCancel.style.display = '';
+                    confirmOk.textContent = '确定';
+                };
+
+                // 添加事件监听器
+                confirmOk.addEventListener('click', handleClose);
+                confirmModalOverlay.addEventListener('click', handleOverlayClick);
+            });
+        }
+
         // 预加载图片
         function preloadImages() {
             return new Promise((resolve) => {
@@ -1920,6 +2016,9 @@
             if (savedData) {
                 try {
                     collectionData = JSON.parse(savedData);
+                    collectionData.friendIds = collectionData.friendIds || [];
+                    collectionData.allCollected = collectionData.allCollected || false;
+                    showFriendDiff();
                 } catch (e) {
                     console.error("加载数据失败:", e);
                     collectionData = {};
@@ -1929,10 +2028,46 @@
                 collectionData = {
                     lastUpdate: new Date().toISOString(),
                     version: "1.0",
-                    friends: {}
+                    friends: {},
+                    friendIds: friends.map(i => i.id),
+                    allCollected: false
                 };
                 saveCollectionData();
             }
+        }
+
+        async function showFriendDiff() {
+            const before = collectionData.friendIds || [];
+            const now = friends.map(i => i.id);
+            const removed = before.filter(i => !now.includes(i));
+            if (removed.length) {
+                await showAlert(`友链${removed.map(i => i.toString()).join('、')}不见了！QAQ\n不用担心，将来如果这些友链恢复，你的抽奖记录也会恢复！`, '友链不见了', ':(', '好吧', { danger: true });
+            }
+            const newfriend = now.filter(i => !before.includes(i));
+            if (newfriend.length) {
+                await showAlert(`上新了${newfriend.length}条友链，快去收集它们吧！`, '新的朋友！', ';)', 'Go!Go!Go!', { danger: false });
+                collectionData.allCollected = false;
+            }
+            if (removed.length || newfriend.length) {
+                collectionData.friendIds = now;
+                saveCollectionData();
+            }
+        }
+
+        function showIfAllCollected() {
+            if (collectionData.allCollected) {
+                return;
+            }
+            for (let friendId of friends.map(i => i.id)) {
+                for (let qualityId of qualities.map(i => i.id)) {
+                    if (!collectionData.friends[friendId][qualityId]) {
+                        return;
+                    }
+                }
+            }
+            collectionData.allCollected = true;
+            saveCollectionData();
+            showAlert(`恭喜你，集齐了所有的${friends.length}条友链的全部${qualities.length}种品质！`, '好耶，集齐了！', '🎉', '知道了', { danger: false });
         }
 
         // 修改加载抽奖次数数据的函数
@@ -2039,9 +2174,12 @@
                         break;
                     }
                 }
+                const fullAt = new Date(fullTime);
+                fullRecoveryAtSpan.textContent = `${fullAt.getHours().toString().padStart(2, '0')}:${fullAt.getMinutes().toString().padStart(2, '0')}:${fullAt.getSeconds().toString().padStart(2, '0')}` + (fullAt.getDay() !== (new Date()).getDay() ? '(+1)' : '');
             } else {
                 nextRecoverySpan.textContent = "已满";
                 fullRecoverySpan.textContent = "已满";
+                fullRecoveryAtSpan.textContent = "已满";
                 navNextRecovery.textContent = "已满";
             }
 
@@ -2260,6 +2398,7 @@
                         const friend = findFriendById(parseInt(friendId)); // 根据 id 查找友链
                         const qualityName = getQualityName(qualityId);
                         showToast(`恭喜！你抽到了：${friend.name} - ${qualityName}品质`, 'success');
+                        showIfAllCollected();
                     }, 300);
                 } else {
                     requestAnimationFrame(frame);
@@ -2418,6 +2557,8 @@
             } else {
                 showToast('十连抽完成，相信你下次一定会出稀有品质！', 'warning');
             }
+
+            showIfAllCollected();
         }
 
         // 创建URL容器
@@ -2723,6 +2864,26 @@
             // 设置URL容器
             modalUrlContainer.innerHTML = '';
             const urlContainer = createUrlContainer(friend.url, hasObtained, true, 'large');
+            const urlText = urlContainer.childNodes[0];
+            urlText.classList.add("scroll-no-bar");
+            let lasttime;
+            let scrollLeft;
+            function scrollFrame(timestamp) {
+                if (!lasttime) {
+                    lasttime = timestamp;
+                    scrollLeft = -urlText.clientWidth;
+                }
+                const delta = timestamp - lasttime;
+                lasttime = timestamp;
+                scrollLeft += delta * 0.1;
+                urlText.scrollLeft = scrollLeft;
+                if (scrollLeft >= urlText.scrollWidth) {
+                    scrollLeft = -urlText.clientWidth;
+                }
+                if (modalOverlay.classList.contains("active")) {
+                    requestAnimationFrame(scrollFrame);
+                }
+            }
             modalUrlContainer.appendChild(urlContainer);
 
             modalBestQuality.textContent = hasObtained ? getQualityName(bestQuality) : '无';
@@ -2748,6 +2909,7 @@
 
             // 显示弹窗
             modalOverlay.classList.add('active');
+            requestAnimationFrame(scrollFrame);
             // 确保弹窗内容滚动到顶部
             setTimeout(() => {
                 document.querySelector('.modal-content').scrollTop = 0;
