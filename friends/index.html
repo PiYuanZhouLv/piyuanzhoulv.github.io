@@ -1599,6 +1599,8 @@
             <div class="control-group">
                 <input type="checkbox" id="show-unobtained" class="checkbox" checked>
                 <label for="show-unobtained">显示未抽中的友链</label>
+                <input type="checkbox" id="show-example" class="checkbox">
+                <label for="show-example">显示测试友链</label>
             </div>
             <button class="button" id="cheat-unlock">一键解锁（普通品质）</button>
         </div>
@@ -1708,7 +1710,7 @@
             <div>1. 显示名称 (如：XXX的博客)</div>
             <div>2. 一段简介 (用于详情页显示)</div>
             <div>3. URL (用于显示、跳转的网址)</div>
-            <div>4. Icon (用于展示的图标，建议为方形，格式为img标签可显示的即可，最大显示大小为200px/200px，不宜过大)</div>
+            <div>4. Icon (用于展示的图标，建议为方形，格式为img标签可显示的即可，最大显示大小为200px/200px，不宜过大，可以为URL)</div>
         </div>
     </div>
 
@@ -1773,6 +1775,7 @@
         const progressBars = document.getElementById('progress-bars');
         const searchInput = document.getElementById('search');
         const showUnobtained = document.getElementById('show-unobtained');
+        const showExample = document.getElementById('show-example');
         const cheatUnlockBtn = document.getElementById('cheat-unlock');
         const importDataBtn = document.getElementById('import-data');
         const exportDataBtn = document.getElementById('export-data');
@@ -2305,6 +2308,7 @@
             // 展示页面控件
             searchInput.addEventListener('input', renderCollectionPage);
             showUnobtained.addEventListener('change', renderCollectionPage);
+            showExample.addEventListener('change', renderCollectionPage);
 
             // 数据管理按钮
             cheatUnlockBtn.addEventListener('click', cheatUnlockAll);
@@ -2726,6 +2730,7 @@
         function renderCollectionPage() {
             const searchTerm = searchInput.value.toLowerCase();
             const showUnobtainedChecked = showUnobtained.checked;
+            const showExampleChecked = showExample.checked;
 
             // 清空容器
             friendsContainer.innerHTML = '';
@@ -2749,6 +2754,8 @@
 
                 // 如果不显示未获得且未获得，跳过
                 if (!showUnobtainedChecked && !hasObtained) return;
+
+                if (!showExampleChecked && friendId < 10) return;
 
                 // 获取最高品质
                 const bestQuality = getBestQuality(friendData);
