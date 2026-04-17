@@ -120,6 +120,10 @@
             margin: 0 auto;
         }
 
+        hr {
+            width: 100%;
+        }
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -609,6 +613,12 @@
             flex: 1;
             min-height: 0;
         }
+
+        #help-page {
+            background-color: var(--color-background);
+            position: absolute;
+            z-index: 800;
+        }
     </style>
 </head>
 
@@ -667,7 +677,7 @@
         <div id="index-page" class="page active">
             <header style="display: flex; flex-direction: column; align-items: center;">
                 <div
-                    style="display: flex; justify-content: space-evenly; align-items: center; width: 100%; flex-wrap: wrap;">
+                    style="display: flex; justify-content: space-evenly; align-items: center; width: 100%; flex-wrap: wrap; margin: 20px;">
                     <button onclick="location.href = '/';" style="position: relative;z-index: 500;">&lt;返回首页</button>
                     <div style="font-size: 50px; font-weight: bold;">每<span id="title-freq">咕</span>一题</div>
                     <button onclick="openHelp()" style="position: relative;z-index: 501;">这是什么?</button>
@@ -694,10 +704,10 @@
             <section id="problem-list" style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
             </section>
 
-            <nav style="display: flex; align-items: center; gap: 10px;">
-                <button onclick="pagecount--; renderProblemList();">Prev</button><span
-                    id="current-pagecount"></span>/<span id="total-pagecount"></span>页<button
-                    onclick="pagecount++; renderProblemList();">Next</button>共<span id="search-count"></span>条结果
+            <nav style="display: flex;align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                <button onclick="pagecount--; renderProblemList();">Prev</button><div><span
+                    id="current-pagecount"></span>/<span id="total-pagecount"></span>页</div><button
+                    onclick="pagecount++; renderProblemList();">Next</button><div>共<span id="search-count"></span>条结果</div>
             </nav>
 
             <div style="height: 60px;"></div>
@@ -706,6 +716,41 @@
 
         <div id="problem-page" class="page"
             style="gap: 0; background-color: var(--color-background); align-items: stretch;"></div>
+
+        <div id="help-page" class="page">
+            <button onclick="closeHelp()" style="position: absolute; top: 30px; right: 30px;">x</button>
+            <h2>这是什么?</h2>
+            <p>这是圆周率给大家出的题的合集，你可以在这上面找到题目的附件，并且可以提交flag验证是否正确！</p>
+            <p>小彩蛋：这个网页采取了伪后端的设计，你能看到好似有后端的API调用，事实上，这是一个完完全全的静态网站！</p>
+            <hr>
+            <figure>
+                <img src="files/5c0edd1c14550171b394c2e75fee698e.png" style="max-width: 80%;">
+                <figcaption>主界面</figcaption>
+            </figure>
+            <p>这是每咕一题的主界面，之所以叫每咕一题，是因为圆周率比较懒，大概率不能持续更新，所以就叫每咕一题吧！</p>
+            <p>搜索框可以搜索标题/简介，由于圆周率比较懒，只忽略了大小写，然后做全文匹配；tag点击可以切换筛选，这里做了一个小操作，会把全选和全部选等价，也就是说，如果你只想看没做过的题，点击一次“未解出”就好了~</p>
+            <p>同一筛选之间采用“或”的逻辑连接，不同筛选之间采取“和”的逻辑连接</p>
+            <p>小彩蛋：每咕一题的标题会根据最后一道题的出题时间变化；部分解出的题目在tag上会显示解出数/总flag数，而不是“部分解出”；当一个标签没有被筛选中的时候会变成灰色，但由于目前的题目都只有一个tag，无法展现这一功能</p>
+            <p>点击题目卡片即可打开题目，下方还有换页和筛选统计，换页是循环的，你可以通过“Prev”快速到达最后一页</p>
+            <hr>
+            <figure>
+                <img src="files/be6c82ba22d77bbb95077e3309fef520.png" style="max-width: 80%;">
+                <figcaption>问题详情</figcaption>
+            </figure>
+            <p>这是问题详情页，里面有问题的内容及题解，你可以在这里验证flag是否正确</p>
+            <p>若要关闭页面，你可以：点击x、使用地址栏返回、按下ESC、点击题目外侧空白区域</p>
+            <p>第一行中有题目的名称，完成情况，tag以及一个返回按钮</p>
+            <p>第二行是题目的详细描述，可能会对做题有帮助</p>
+            <p>第三行是提示，分为提示/spoiler提示/警告三种，spoiler提示与做题思路相关程度较大（星级越高提示量越大，建议越靠后打开），打开时有确认框</p>
+            <p>第四行是附件栏，可以点击绿色链接下载附件</p>
+            <p>第五行是服务端附件栏，部分服务端附件是黑盒，将鼠标放上去时会变为红色，点击下载前有弹窗提醒；反之为白盒附件，可以查看分析，你可以找到其中硬编码的flag，但请按正常流程完成解题；后面有默认协议/端口，以及如何运行服务端的提示</p>
+            <p>第六行是flag提交栏，你可以在这里看到已解出/总flag数，可以将你找到的flag提交，网页会通过校验md5的方式来确认你是否找到了正确的flag</p>
+            <p>第七行是WP栏，你可以在这里看到本题的WP，打开前会有弹窗确认</p>
+            <p>小彩蛋：打开/关闭页面的动画参考了osu!，于是加上了ESC关闭的功能（更像了）；在浏览器失去焦点后，再点击外侧空白区域有500ms/1次的忽略点击操作，这样就不会因为复制flag回来的时候不小心点到外面导致问题页被关闭了~</p>
+            <hr>
+            <p>差不多就说到这吧~快按下ESC退出帮助页面开始你的解题之旅吧！更多有关内容可以查看<a href="/2026/02/28/小站修补琐记2/#2026-4-17-每咕一题调试完成上线" style="border: none;">这篇博客</a>或者<a href="https://github.com/PiYuanZhouLv/MyBlog/tree/main/source/problems/index.html" style="border: none;">源代码</a>哦</p>
+            <div style="height: 60px;"></div>
+        </div>
 
     </main>
 
@@ -778,14 +823,10 @@
             renderProblemList()
         }));
 
-        // 确认弹窗函数
         function showConfirm(message, title = '确认', options = {}) {
             return new Promise((resolve) => {
-                // 设置弹窗内容
                 confirmTitle.textContent = title;
                 confirmMessage.textContent = message;
-
-                // 设置图标
                 if (options.danger) {
                     confirmIcon.textContent = '⚠';
                     confirmIcon.style.color = 'var(--color-danger)';
@@ -795,53 +836,39 @@
                     confirmIcon.style.color = 'var(--color-info)';
                     confirmOk.classList.remove('button-danger');
                 }
-
-                // 显示弹窗
                 confirmModalOverlay.classList.add('active');
-
-                // 设置按钮事件
                 const handleConfirm = () => {
                     cleanup();
                     resolve(true);
                 };
-
                 const handleCancel = () => {
                     cleanup();
                     resolve(false);
                 };
-
                 const handleOverlayClick = (e) => {
                     if (e.target === confirmModalOverlay) {
                         handleCancel();
                     }
                 };
-
-                // 清理事件监听器
                 const cleanup = () => {
                     confirmOk.removeEventListener('click', handleConfirm);
                     confirmCancel.removeEventListener('click', handleCancel);
                     confirmModalOverlay.removeEventListener('click', handleOverlayClick);
                     confirmModalOverlay.classList.remove('active');
                 };
-
-                // 添加事件监听器
                 confirmOk.addEventListener('click', handleConfirm);
                 confirmCancel.addEventListener('click', handleCancel);
                 confirmModalOverlay.addEventListener('click', handleOverlayClick);
             });
         }
 
-        // 提示弹窗函数，借用确认弹窗
         function showAlert(message, title = '提示', icon = 'ⓘ', button = '确认', options = {}) {
             return new Promise((resolve) => {
-                // 设置弹窗内容
                 confirmTitle.textContent = title;
                 confirmMessage.textContent = message;
                 confirmIcon.textContent = icon;
                 confirmOk.textContent = button;
                 confirmCancel.style.display = 'none';
-
-                // 设置图标
                 if (options.danger) {
                     confirmIcon.style.color = 'var(--color-danger)';
                     confirmOk.classList.add('button-danger');
@@ -849,23 +876,16 @@
                     confirmIcon.style.color = 'var(--color-info)';
                     confirmOk.classList.remove('button-danger');
                 }
-
-                // 显示弹窗
                 confirmModalOverlay.classList.add('active');
-
-                // 设置按钮事件
                 const handleClose = () => {
                     cleanup();
                     resolve();
                 };
-
                 const handleOverlayClick = (e) => {
                     if (e.target === confirmModalOverlay) {
                         handleClose();
                     }
                 };
-
-                // 清理事件监听器
                 const cleanup = () => {
                     confirmOk.removeEventListener('click', handleClose);
                     confirmModalOverlay.removeEventListener('click', handleOverlayClick);
@@ -873,20 +893,15 @@
                     confirmCancel.style.display = '';
                     confirmOk.textContent = '确定';
                 };
-
-                // 添加事件监听器
                 confirmOk.addEventListener('click', handleClose);
                 confirmModalOverlay.addEventListener('click', handleOverlayClick);
             });
         }
 
-        // 消息提示函数
         function showToast(message, type = 'info') {
             const toastContainer = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-
-            // 根据类型设置图标
             let icon = '';
             switch (type) {
                 case 'success':
@@ -901,20 +916,14 @@
                 default:
                     icon = 'ℹ';
             }
-
             toast.innerHTML = `
                 <span class="toast-icon">${icon}</span>
                 <span class="toast-message">${message}</span>
             `;
-
             toastContainer.appendChild(toast);
-
-            // 显示动画
             setTimeout(() => {
                 toast.classList.add('show');
             }, 10);
-
-            // 3秒后移除
             setTimeout(() => {
                 toast.classList.remove('show');
                 toast.classList.add('hide');
@@ -945,10 +954,43 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(solveData));
         }
 
+        let ignoreClick = false;
+        let clearIgnoreTimeout;
+        window.addEventListener("focus", () => {
+            console.log('foucs')
+            ignoreClick = true;
+            clearIgnoreTimeout = setTimeout(() => {
+                ignoreClick = false;
+                clearIgnoreTimeout = null;
+            }, 500);
+        })
+        function stopIgnoreClick() {
+            if (clearIgnoreTimeout) {
+                clearTimeout(clearIgnoreTimeout);
+            }
+            ignoreClick = false;
+        }
+
+        let helpOpened = false;
+        function openHelp() {
+            helpOpened = true;
+            document.getElementById("help-page").classList.add('active');
+            document.getElementById("help-page").scrollTop = 0;
+            document.getElementById("help-page").animate([{ top: '100vh', opacity: 0 }, { top: '0', opacity: 1 }], { duration: 300, fill: "forwards", easing: "ease-in-out" });
+        }
+
+        function closeHelp() {
+            helpOpened = false;
+            const pageElem = document.getElementById("help-page");
+            if (!pageElem.classList.contains('active')) return;
+            pageElem.animate([{ top: '0', opacity: 1 }, { top: '100vh', opacity: 0 }], { duration: 300, fill: "forwards", easing: "ease-in-out" }).finished.then(() => {
+                pageElem.classList.remove("active");
+            });
+        }
+
         function doSearch() {
             return Object.entries(problems).filter(kv => {
                 let [pid, item] = kv;
-
                 if (document.getElementById("search").value && !(item.title + item.desc.replace(/<.*?>/g, '')).toLowerCase().includes(document.getElementById("search").value.toLowerCase())) {
                     return false;
                 }
@@ -1028,7 +1070,7 @@
             })
             if (document.getElementById("problem-list").innerHTML === "") {
                 const nothingFound = document.createElement("div");
-                nothingFound.innerText = "Nothing was found within your search...";
+                nothingFound.innerText = "Nothing was found within your search...\n什么都没有找到喵……";
                 nothingFound.classList.add('nothing-found')
                 document.getElementById("problem-list").append(nothingFound);
             }
@@ -1048,9 +1090,9 @@
                     elem.open = false;
                     if (await showConfirm('折叠框内含有与解题思路相关度较高的内容，您确定要展开吗？', 'Spoiler Alert!')) {
                         elem.dataset.confirmed = true;
-                        let arr = solveData['confirmed'][problemDetail['pid']] || [];
+                        let arr = solveData['confirmed'][currentDisplayedPid] || [];
                         arr.push(elem.dataset.confirmId);
-                        solveData['confirmed'][problemDetail['pid']] = arr;
+                        solveData['confirmed'][currentDisplayedPid] = arr;
                         saveData();
                         elem.open = true;
                     }
@@ -1068,13 +1110,13 @@
         }
 
         let problemDetail;
-        async function openProblem(pid) {
-            problemDetail = await (await fetch(`problem-details/${pid}`)).json();
-
-            manualHashChange = true;
-            window.location.hash = pid;
-            manualHashChange = false;
-
+        let currentDisplayedPid = null;
+        async function showProblem(pid) {
+            if (!problems[pid]) return hideProblem();
+            if (currentDisplayedPid === pid && document.getElementById("problem-page").classList.contains('active')) return;
+            const detail = await (await fetch(`problem-details/${pid}`)).json();
+            problemDetail = detail;
+            problemDetail.pid = pid;
             document.getElementById("problem-page").innerHTML = `
 <div class="filling"></div>
 <div id="problem-maincontent">
@@ -1088,25 +1130,25 @@
                 ${problems[pid]['tags'].map(tag => `<span class="tag" style="--hue: ${(cateTagAndHue.find(item => item.name == tag) || descTagAndHue.find(item => item.name == tag))["hue"]}">${tag}</span>`).join('')}
             </div>
         </span>
-        <button onclick="closeProblem()">x</button>
+        <button onclick="history.back()">x</button>
     </div>
     <div>
         <h2 style="margin-top: 0;">题目描述</h2>
-        ${problemDetail['desc']}
+        ${detail['desc']}
     </div>
     <div>
-        ${problemDetail['tips']['hint'].map(hint => `<div class="tips hint">Hint: ${hint}</div>`).join('')}
-        ${problemDetail['tips']['spoiler'].map((spoiler, i) => `<details class="tips hint" data-confirm-id="spoiler${~i}" data-confirmed=${(solveData['confirmed'][pid] || []).includes(`spoiler${~i}`)}><summary>Spoiler Hint (${spoiler[1]}${'★'.repeat(spoiler[1])}${'☆'.repeat(5 - spoiler[1])})</summary>${spoiler[0]}</details>`).join('')}
-        ${problemDetail['tips']['warning'].map(warning => `<div class="tips warning">Warning: ${warning}</div>`).join('')}
-        ${(Object.values(problemDetail['tips']).map(sub => sub.length)).reduce((x, y) => x + y) ? '' : '本题没有提示/警告'}
+        ${detail['tips']['hint'].map(hint => `<div class="tips hint">Hint: ${hint}</div>`).join('')}
+        ${detail['tips']['spoiler'].map((spoiler, i) => `<details class="tips hint" data-confirm-id="spoiler${~i}" data-confirmed=${(solveData['confirmed'][pid] || []).includes(`spoiler${~i}`)}><summary>Spoiler Hint (${spoiler[1]}${'★'.repeat(spoiler[1])}${'☆'.repeat(5 - spoiler[1])})</summary>${spoiler[0]}</details>`).join('')}
+        ${detail['tips']['warning'].map(warning => `<div class="tips warning">Warning: ${warning}</div>`).join('')}
+        ${(Object.values(detail['tips']).map(sub => sub.length)).reduce((x, y) => x + y) ? '' : '本题没有提示/警告'}
     </div>
     <div>
         <span>附件:</span>
-        ${problemDetail['attachments'].map(fn => `<a href="attachments/${pid}/${fn}" download>${fn}</a>`).join('') || '本题没有附件'}
+        ${detail['attachments'].map(fn => `<a href="attachments/${pid}/${fn}" download>${fn}</a>`).join('') || '本题没有附件'}
     </div>
     <div>
         <span>服务端:</span>
-        ${problemDetail['server'].map(server => `<div><span>服务端附件:<a href="attachments/${pid}/${server[0]}" download data-blackbox=${server[3]}>${server[0]}</a></span><span>连接地址:<code>${server[2]}</code></span><button onclick="showAlert('${server[1]}', '运行方式')">点击查看运行方式</button></div>`).join('') || '本题没有服务端'}
+        ${detail['server'].map(server => `<div><span>服务端附件:<a href="attachments/${pid}/${server[0]}" download data-blackbox=${server[3]}>${server[0]}</a></span><span>连接地址:<code>${server[2]}</code></span><button onclick="showAlert('${server[1]}', '运行方式')">点击查看运行方式</button></div>`).join('') || '本题没有服务端'}
     </div>
     <div>
         提交flag:
@@ -1115,14 +1157,12 @@
     </div>
     <details data-confirm-id="WP" data-confirmed=${(solveData['confirmed'][pid] || []).includes('WP')}>
         <summary>查看题解（WP）</summary>
-        ${problemDetail['WP']}
+        ${detail['WP']}
     </details>
 </div>
 <div class="filling"></div>
-`
-
+`;
             document.querySelectorAll("#problem-page details").forEach(elem => hookDetailsOpen(elem));
-
             document.querySelectorAll("a[download][data-blackbox=true]").forEach(e => e.addEventListener("click", evt => {
                 evt.preventDefault();
                 showAlert('这是一个黑盒附件，请勿在解题时阅读其中内容！', '黑盒附件提醒', '!!', '我知道了', { danger: true }).then(() => {
@@ -1133,7 +1173,6 @@
                     tempA.remove();
                 })
             }))
-
             hljs.highlightAll();
             setTimeout(() => document.querySelectorAll('pre code').forEach(
                 elem => {
@@ -1142,71 +1181,98 @@
                     removeHljsPrefix(elem);
                 }
             ), 10)
-
-            document.querySelectorAll(".filling").forEach(e => e.addEventListener("click", closeProblem));
-
+            document.querySelectorAll(".filling").forEach(e => e.addEventListener("click", () => {
+                console.log('back')
+                if (ignoreClick) {
+                    stopIgnoreClick();
+                    return;
+                }
+                history.back();
+            }));
             document.getElementById("problem-page").classList.add('active');
             document.getElementById("problem-page").scrollTop = 0;
             document.getElementById("problem-page").animate([{ top: '100vh', opacity: 0 }, { top: '0', opacity: 1 }], { duration: 300, fill: "forwards", easing: "ease-in-out" });
+            currentDisplayedPid = pid;
         }
 
-        function closeProblem() {
-            if (!problemDetail) {
-                return;
-            }
+        function hideProblem() {
+            if (!problemDetail && !currentDisplayedPid) return;
             problemDetail = null;
-            manualHashChange = true;
-            window.location.hash = '';
-            manualHashChange = false;
-            renderProblemList();
-            document.getElementById("problem-page").animate([{ top: '0', opacity: 1 }, { top: '100vh', opacity: 0 }], { duration: 300, fill: "forwards", easing: "ease-in-out" }).finished.then(() => document.getElementById("problem-page").classList.remove("active"));
+            currentDisplayedPid = null;
+            const pageElem = document.getElementById("problem-page");
+            if (!pageElem.classList.contains('active')) return;
+            pageElem.animate([{ top: '0', opacity: 1 }, { top: '100vh', opacity: 0 }], { duration: 300, fill: "forwards", easing: "ease-in-out" }).finished.then(() => {
+                pageElem.classList.remove("active");
+                renderProblemList();
+            });
+        }
+
+        function openProblem(pid) {
+            if (pid && problems[pid]) {
+                if (window.location.hash !== `#${pid}`) {
+                    window.location.hash = pid;
+                }
+            } else {
+                console.warn("invalid pid");
+            }
         }
 
         document.body.addEventListener("keydown", evt => {
-            console.log(evt.keyCode);
             if (evt.keyCode === 27) {
-                closeProblem();
+                if (helpOpened) {
+                    closeHelp();
+                    return;
+                }
+                if (!currentDisplayedPid) {
+                    return;
+                }
+                history.back();
             }
         })
 
-        document.querySelector("html").addEventListener("click", closeProblem);
-        document.querySelector("main").addEventListener("click", evt => evt.stopPropagation());
+        document.querySelector("html").addEventListener("click", () => {
+            if (ignoreClick) {
+                stopIgnoreClick();
+                return;
+            }
+            if (helpOpened) {
+                closeHelp();
+                return;
+            }
+            if (!currentDisplayedPid) {
+                return;
+            }
+            history.back();
+        });
+        document.querySelector("body").addEventListener("click", evt => evt.stopPropagation());
 
         function checkAnswer() {
             const hash = md5(document.getElementById('answer').value.trim());
-            if ((solveData['solved'][problemDetail["pid"]] || []).includes(hash)) {
+            if ((solveData['solved'][currentDisplayedPid] || []).includes(hash)) {
                 showToast('哎呀，这个flag已经提交过了捏', 'warning');
             } else if (problemDetail['flag'].includes(hash)) {
                 showToast('恭喜您，回答正确！', 'success');
-                let arr = solveData['solved'][problemDetail['pid']] || [];
+                let arr = solveData['solved'][currentDisplayedPid] || [];
                 arr.push(hash);
-                solveData['solved'][problemDetail['pid']] = arr;
+                solveData['solved'][currentDisplayedPid] = arr;
                 checkCompleted();
                 saveData();
-                document.getElementById("live-status").innerText = solveData['solved'][problemDetail['pid']].length == problems[problemDetail['pid']]['flag'] ? '已解出' : '部分解出';
-                document.getElementById("live-status").style.setProperty('--hue', solveData['solved'][problemDetail['pid']].length == problems[problemDetail['pid']]['flag'] ? 158 : 86);
+                document.getElementById("live-status").innerText = solveData['solved'][currentDisplayedPid].length == problems[currentDisplayedPid]['flag'] ? '已解出' : '部分解出';
+                document.getElementById("live-status").style.setProperty('--hue', solveData['solved'][currentDisplayedPid].length == problems[currentDisplayedPid]['flag'] ? 158 : 86);
                 document.getElementById("live-solve").innerText = arr.length;
             } else {
                 showToast('哎呀，好像不对呢……', 'error');
             }
         }
 
-        let manualHashChange = false;
         function handleHashChange() {
-            console.log("hash change:", window.location.hash, "manual:", manualHashChange);
-            if (manualHashChange) {
-                manualHashChange = false;
-                return;
-            }
             const hash = window.location.hash.slice(1);
-            if (!hash) {
-                closeProblem();
+            if (hash && problems[hash]) {
+                showProblem(hash);
             } else {
-                openProblem(hash);
+                hideProblem();
             }
         }
-
-        window.addEventListener("hashchange", handleHashChange);
 
         async function newFlagTip() {
             let delProblem = [];
@@ -1237,7 +1303,7 @@
         }
 
         function checkCompleted() {
-            if(solveData['completed']){
+            if (solveData['completed']) {
                 return;
             }
             for (let pid in problems) {
@@ -1253,14 +1319,30 @@
         let pagecount = 0;
         async function init() {
             problems = await (await fetch('problem-list')).json();
+            const pbl = Object.values(problems);
+            const delta = Math.ceil((Date.now() - (new Date(pbl[pbl.length-1]['time']).getTime())) / (1000 * 60 * 60 * 24 * 7));
+            if(delta == 1){
+                document.getElementById("title-freq").innerText = '周';
+            }else if(delta<4){
+                document.getElementById("title-freq").innerText = `${delta}周`;
+            }else if(delta==4){
+                document.getElementById("title-freq").innerText = '月';
+            }else{
+                document.getElementById("title-freq").innerText = ['咕', '🕊'][Math.floor(Math.random()*2)];
+            }
             loadData();
             renderProblemList();
+            if (window.location.hash) {
+                const hash = window.location.hash;
+                history.replaceState(null, null, '#');
+                history.pushState(null, null, hash);
+            }
+            window.addEventListener("hashchange", handleHashChange);
             handleHashChange();
             newFlagTip();
         }
 
         init();
-
     </script>
 </body>
 
