@@ -1930,7 +1930,7 @@
 
         let popStateHandle = null;
         function registerPopStateHandle(handle) {
-            popStateHandle = null;
+            popStateHandle = handle;
             history.pushState(null, null, '');
         }
 
@@ -1943,8 +1943,9 @@
 
         window.addEventListener("popstate", ()=>{
             if(popStateHandle){
-                popStateHandle();
+                const handle = popStateHandle;
                 popStateHandle = null;
+                handle();
             }
         })
 
