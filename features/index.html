@@ -14,7 +14,7 @@
 <meta property="og:description" content="本站有很多圆周率自己加的史，如果您不想要这些特性，可以在这里修改 注意：本页的选项均使用localStorage存储，请使用支持localStorage的浏览器 正在检测你的浏览器是否支持localStorage……🔎       .unknow{         border: 1px hsla(54, 88%, 24%, 1.00) solid;         color: hsla(54">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-01-04T09:20:11.000Z">
-<meta property="article:modified_time" content="2026-01-04T15:33:52.228Z">
+<meta property="article:modified_time" content="2026-05-04T18:53:23.042Z">
 <meta property="article:author" content="圆周率">
 <meta name="twitter:card" content="summary">
     
@@ -106,6 +106,18 @@
     code, pre {
       font-family: "Maple Mono NF CN", monospace;
     }
+
+    ::view-transition-image-pair(root) {
+      isolation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+      display: block;
+      transition: none !important;
+    }
   </style>
 <meta name="generator" content="Hexo 7.3.0"></head>
 
@@ -117,14 +129,22 @@
       }else{
         document.getElementById("extra-logo").style.display = 'flex';
       }
+      
+      window.addEventListener("focus", ()=>{
+        if((localStorage.getItem("extra-logo")||'show')==='none'){
+          document.getElementById("extra-logo").style.display = 'none';
+        }else{
+          document.getElementById("extra-logo").style.display = 'flex';
+        }
+      })
     </script>
     <div style="position: fixed; right: 0; bottom: 0; z-index: 999; margin: 10px;">
       <button id="sun" style="border: none; background: none; color:white; cursor: pointer;" onclick="switchColorScheme('light')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg></button>
       <button id="moon" style="border: none; background: none; color: black; cursor: pointer;" onclick="switchColorScheme('night')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg></button>
     </div>
     <script>
-      colorScheme = localStorage.getItem('color-scheme') || 'auto'
-      colorScheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme
+      colorSchemeOpt = localStorage.getItem('color-scheme') || 'auto'
+      colorScheme = colorSchemeOpt==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorSchemeOpt
       if(colorScheme==='light'){
         document.getElementById("sun").style.display = "none"
         document.getElementById("moon").style.display = ""
@@ -132,7 +152,8 @@
         document.getElementById("sun").style.display = ""
         document.getElementById("moon").style.display = "none"
       }
-      function switchColorScheme(scheme){
+      function switchColorScheme4Real(scheme){
+        colorSchemeOpt = scheme
         localStorage.setItem("color-scheme", scheme)
         if(scheme==='light'){
           document.getElementById("sun").style.display = "none"
@@ -148,10 +169,80 @@
           classlist.remove('light')
         }
       }
+      function switchColorScheme(scheme){
+        prefersReducedMotion = localStorage.getItem('reduce-motion') ? {fancy: false, plain: true, media: matchMedia('(prefers-reduced-motion)').matches}[localStorage.getItem('reduce-motion')] : matchMedia('(prefers-reduced-motion)').matches
+        if(!document.startViewTransition || prefersReducedMotion){
+          switchColorScheme4Real(scheme)
+          return
+        }
+        const x = innerWidth
+        const y = innerHeight
+        const endRadius = Math.hypot(
+          Math.max(x, innerWidth - x),
+          Math.max(y, innerHeight - y),
+        )
+        document.startViewTransition(()=>switchColorScheme4Real(scheme)).ready.then(() => {
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0 at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+              ]
+            },
+            {
+              duration: 400,
+              easing: "ease-in",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        })
+      }
+      window.addEventListener("focus", ()=>{
+        const newOpt = localStorage.getItem('color-scheme') || 'auto'
+        if(newOpt !== colorSchemeOpt){
+          colorSchemeOpt = newOpt
+          const scheme = colorSchemeOpt==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorSchemeOpt
+          if(scheme==='light'){
+            document.getElementById("sun").style.display = "none"
+            document.getElementById("moon").style.display = ""
+            let classlist = document.querySelector("html").classList
+            classlist.remove('night')
+            classlist.add('light')
+          }else{
+            document.getElementById("sun").style.display = ""
+            document.getElementById("moon").style.display = "none"
+            let classlist = document.querySelector("html").classList
+            classlist.add('night')
+            classlist.remove('light')
+          }
+        }
+      })
     </script>
     <script>
       localStorage = localStorage || {getItem: ()=>(undefined)};
-      if((localStorage.getItem("backbtn-func")||"session")==="session"){
+      document.addEventListener("DOMContentLoaded", ()=>{
+        document.querySelectorAll('a[href^="#"]').forEach(elem=>{
+          elem.addEventListener("click", evt=>{
+            if((localStorage.getItem("backbtn-func")||"hook")==="hook"){
+              evt.preventDefault();
+              const anchor = decodeURI(elem.href.slice(elem.href.search('#')));
+              history.replaceState(history.state, null, anchor);
+              document.getElementById(anchor.slice(1)).scrollIntoView({behavior: "smooth"});
+            }
+          })
+        })
+        document.querySelectorAll('a[href^="#"]').forEach(elem=>{
+          elem.addEventListener("click", evt=>{
+            if((localStorage.getItem("backbtn-func")||"hook")!=="hook"){
+              anchorClickCount++;
+            }
+            setTimeout(()=>history.replaceState({anchorClickCount: anchorClickCount}, null, ''), 10);
+          })
+        })
+      })      
+      let anchorClickCount = 0;
+      history.replaceState({anchorClickCount: 0}, null, '');
+      if(localStorage.getItem("backbtn-func")==="session"){
         function pushHistory(url){
           let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
           arr.push(url);
@@ -371,6 +462,7 @@
     (document.querySelector(`input[name=theme-radio][value=${themeSetting}]`)||document.querySelector('input[name=theme-radio][value=auto]')).checked = true;
     function switchThemeTo(colorScheme){
         localStorage.setItem("color-scheme", colorScheme);
+        colorSchemeOpt = colorScheme;
         scheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
         if(scheme==='light'){
             document.getElementById("sun").style.display = "none";
@@ -396,6 +488,74 @@
     })
     document.getElementById("moon").addEventListener("click", ()=>{
         document.querySelector('input[name=theme-radio][value=night]').checked = true;
+    })
+    window.addEventListener("focus", ()=>{
+        document.querySelector(`input[name=theme-radio][value=${localStorage.getItem('color-scheme') || 'auto'}]`).checked = true;
+    })
+</script>
+
+<style>
+    .theme-change-opt {
+        flex: 1;
+        font-size: 1em;
+        padding: 10px;
+        white-space: nowrap;
+        font-family: inherit;
+        color: inherit;
+        border: 2px solid;
+        border-left: none;
+        border-right: none;
+        background: transparent;
+        transition: 0.3s;
+    }
+
+    .theme-change-opt:not(:disabled) {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+
+    .theme-change-opt:not(:disabled):hover {
+        opacity: 1;
+    }
+
+    .theme-change-opt:disabled {
+        color: #077207;
+        background-color: #b4fbb4;
+    }
+
+    .theme-change-opt:nth-child(1) {
+        border-radius: 10px 0 0 10px;
+        border-left: 2px solid;
+    }
+
+    .theme-change-opt:nth-last-child(1) {
+        border-radius: 0 10px 10px 0;
+        border-right: 2px solid;
+    }
+</style>
+
+<fieldset>
+<legend>主题切换动画</legend>
+    <div style="display: flex; flex-wrap: wrap;">
+        <button class="theme-change-opt" value="fancy">使用华丽的切换动画</button>
+        <button class="theme-change-opt" value="plain">使用朴素的切换动画</button>
+        <button class="theme-change-opt" value="media" title="遵循@media (prefers-reduced-motion)的结果">使用媒体查询的结果</button>
+    </div>
+</fieldset>
+
+<script>
+    document.querySelectorAll(".theme-change-opt").forEach(elem => {
+        elem.addEventListener("click", ((elem)=>()=>{
+            localStorage.setItem('reduce-motion', elem.value);
+            document.querySelectorAll(".theme-change-opt").forEach(e=>e.disabled = false);
+            elem.disabled = true;
+        })(elem))
+    })
+    document.querySelector(`.theme-change-opt[value=${localStorage.getItem('reduce-motion')??"media"}]`).disabled = true;
+    
+    window.addEventListener("focus", ()=>{
+        document.querySelectorAll(".theme-change-opt").forEach(e=>e.disabled = false);
+        document.querySelector(`.theme-change-opt[value=${localStorage.getItem('reduce-motion')??"media"}]`).disabled = true;
     })
 </script>
 
@@ -425,13 +585,31 @@
             switchLogoTo(input.value)
         }))(input))
     })
+
+    window.addEventListener("focus", ()=>{
+        logoSetting = localStorage.getItem('extra-logo') || 'show';
+        switchLogoTo(logoSetting);
+        (document.querySelector(`input[name=logo-radio][value=${logoSetting}]`)||document.querySelector('input[name=logo-radio][value=show]')).checked = true;
+    })
 </script>
 
-<h2 id="返回按钮"><a href="#返回按钮" class="headerlink" title="返回按钮"></a>返回按钮</h2><fieldset>
+<h2 id="返回按钮"><a href="#返回按钮" class="headerlink" title="返回按钮"></a>返回按钮</h2><style>
+    html.light {
+        --auto-green: #077207;
+    }
+
+    html.night {
+        --auto-green: #b4fbb4;
+    }
+</style>
+
+<fieldset>
 <legend>返回按钮逻辑</legend>
 <label style="display: flex"><input name="backbtn-radio" type="radio" value="session">在<code>sessionStorage</code>中记录返回地址</label>
 <label style="display: flex"><input name="backbtn-radio" type="radio" value="referer">使用<code>Referer</code>作为返回地址</label>
 <label style="display: flex"><input name="backbtn-radio" type="radio" value="history">执行<code>history.back()</code></label>
+<label style="display: flex"><input name="backbtn-radio" type="radio" value="count">计算页内锚点跳转的次数<span style="color: var(--auto-green)">【推荐】</span></label>
+<label style="display: flex"><input name="backbtn-radio" type="radio" value="hook">拦截默认的锚点行为<span style="color: var(--auto-green)">【推荐，新默认值】</span></label>
 <label style="display: flex"><input name="backbtn-radio" type="radio" value="none">我不要这些乱七八糟的功能</label>
 <div id="backbtn-explain" style="margin: 10px; border: 1px solid; padding: 5px"></div>
 </fieldset>
@@ -442,6 +620,8 @@
         session: '<span>使用<code>sessionStorage</code>存储访问过的界面以模拟返回按钮</span><br/><span style="color: red">缺点：会在浏览器自带的History里面拉屎，每点一次都会被当成“前进”</span>',
         referer: '<span>使用<code>document.referer</code>作为返回目标</span><br/><span style="color: red">缺点：只能返回一层，若使用了“上一篇”/“下一篇”等功能就会在两个页面来回跳</span>',
         history: '<span>使用<code>History API</code>，与浏览器回退按钮功能一致</span><br/><span style="color: red">缺点：锚点会被当成返回点，使用过目录功能后会在同一个页面上跳来跳去</span>',
+        count: '<span>通过计算在页面上通过锚点跳转了多少次来调用<code>history.go(-1-n)</code></span><br/><span style="color: var(--auto-green)">【推荐使用】如果你需要记录同页面内锚点跳转历史，推荐使用该方案</span>',
+        hook: '<span>通过拦截页内跳转锚点的默认行为，改用<code>history.replaceState</code>避免增加历史条目</span><br/><span style="color:  var(--auto-green)">【推荐使用】如果你不需要记录页内锚点跳转历史，推荐使用该方案</span>',
         none: '<span style="color: red">解决问题的终极方法就是解决提出问题的人/事！</span>'
     }
     function backChoose(opt){
@@ -457,6 +637,11 @@
         input.addEventListener("change", ((input)=>(()=>{
             switchBackTo(input.value)
         }))(input))
+    })
+
+    window.addEventListener("focus", ()=>{
+        backFunc = localStorage.getItem("backbtn-func") || "session";
+        backChoose(backFunc);
     })
 </script>
         
