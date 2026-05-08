@@ -1439,6 +1439,7 @@
             if (window.location.hash) {
                 const hash = window.location.hash;
                 history.replaceState(null, null, '#');
+                await (new Promise((resolve)=>setTimeout(resolve, 10)));
                 history.pushState(null, null, hash);
             }
             window.addEventListener("hashchange", handleHashChange);
