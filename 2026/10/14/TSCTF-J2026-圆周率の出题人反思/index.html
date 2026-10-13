@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang=zh class="night" style="font-size: 20px">
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="figcaption {         text-align: center;     }     点击此处访问PDF版 一年一度的TSCTF-J就快要结束了，当初还在赛场上解题的我没想到转眼间就成为了出史人，看着大家比赛了。这次比赛，颇有收获，颇有感触……   “MiscEverythingUp”是我最先出的题，当时就是想出一道所有方向都包含的题目，看看能不能吸引各个方向的人去做其他">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[TSCTF-J2026]圆周率の出题人反思">
+<meta property="og:url" content="https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/index.html">
+<meta property="og:site_name" content="圆周率的废纸堆">
+<meta property="og:description" content="figcaption {         text-align: center;     }     点击此处访问PDF版 一年一度的TSCTF-J就快要结束了，当初还在赛场上解题的我没想到转眼间就成为了出史人，看着大家比赛了。这次比赛，颇有收获，颇有感触……   “MiscEverythingUp”是我最先出的题，当时就是想出一道所有方向都包含的题目，看看能不能吸引各个方向的人去做其他">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image%20(9).png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image%20(10).png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/image.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/image-1.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-2.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-3.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-4.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-5.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/enc.png">
+<meta property="article:published_time" content="2026-10-13T20:18:54.000Z">
+<meta property="article:modified_time" content="2026-10-13T20:48:02.055Z">
+<meta property="article:author" content="圆周率">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://piyuanzhoulv.github.io/image%20(9).png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>[TSCTF-J2026]圆周率の出题人反思</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+  <script>
+    colorScheme = localStorage.getItem('color-scheme') || 'auto';
+    colorScheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+    if(colorScheme==="light"){
+      let classlist = document.querySelector("html").classList;
+      classlist.remove('night');
+      classlist.add('light');
+    }
+    matchMedia('(prefers-color-scheme: dark)').addEventListener("change", ()=>{
+      colorScheme = localStorage.getItem('color-scheme') || 'auto';
+      scheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+      if(scheme==='light'){
+        document.getElementById("sun").style.display = "none"
+        document.getElementById("moon").style.display = ""
+        let classlist = document.querySelector("html").classList
+        classlist.remove('night')
+        classlist.add('light')
+      }else{
+        document.getElementById("sun").style.display = ""
+        document.getElementById("moon").style.display = "none"
+        let classlist = document.querySelector("html").classList
+        classlist.add('night')
+        classlist.remove('light')
+      }
+    })
+  </script>
+  <style>
+    @import url("https://fontsapi.zeoseven.com/293/gb-regular/result.css");
+    @import url("https://fontsapi.zeoseven.com/442/main/result.css");
+
+    .night img{
+      opacity: 0.8;
+    }
+
+    img{
+      border: 1px solid;
+    }
+
+    code, pre {
+      font-family: "Maple Mono NF CN", monospace;
+    }
+
+    ::view-transition-image-pair(root) {
+      isolation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+      display: block;
+      transition: none !important;
+    }
+  </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr" style="transition: 0.3s;">
+    <a id="extra-logo" class="hide-on-phone" href="/" style="position: fixed; left: 0; top: 0; z-index: 999; margin: 10px; display: flex; align-items: center; text-decoration: none; color: inherit; background: inherit; border: 1px solid; border-radius: 10px; padding-left: 10px; transition: opacity 0.3s;"><img src="/images/logo.png" style="width: 50px; height: 50px; border-radius: 5px;"><h1 class="p-name" style="display: inline; margin: 10px;">圆周率的废纸堆</h1></a>
+    <script>
+      if((localStorage.getItem("extra-logo")||'show')==='none'){
+        document.getElementById("extra-logo").style.display = 'none';
+      }else{
+        document.getElementById("extra-logo").style.display = 'flex';
+      }
+      
+      window.addEventListener("focus", ()=>{
+        if((localStorage.getItem("extra-logo")||'show')==='none'){
+          document.getElementById("extra-logo").style.display = 'none';
+        }else{
+          document.getElementById("extra-logo").style.display = 'flex';
+        }
+      })
+    </script>
+    <div style="position: fixed; right: 0; bottom: 0; z-index: 999; margin: 10px;">
+      <button id="sun" style="border: none; background: none; color:white; cursor: pointer;" onclick="switchColorScheme('light')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg></button>
+      <button id="moon" style="border: none; background: none; color: black; cursor: pointer;" onclick="switchColorScheme('night')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg></button>
+    </div>
+    <script>
+      colorSchemeOpt = localStorage.getItem('color-scheme') || 'auto'
+      colorScheme = colorSchemeOpt==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorSchemeOpt
+      if(colorScheme==='light'){
+        document.getElementById("sun").style.display = "none"
+        document.getElementById("moon").style.display = ""
+      }else{
+        document.getElementById("sun").style.display = ""
+        document.getElementById("moon").style.display = "none"
+      }
+      function switchColorScheme4Real(scheme){
+        colorSchemeOpt = scheme
+        localStorage.setItem("color-scheme", scheme)
+        if(scheme==='light'){
+          document.getElementById("sun").style.display = "none"
+          document.getElementById("moon").style.display = ""
+          let classlist = document.querySelector("html").classList
+          classlist.remove('night')
+          classlist.add('light')
+        }else{
+          document.getElementById("sun").style.display = ""
+          document.getElementById("moon").style.display = "none"
+          let classlist = document.querySelector("html").classList
+          classlist.add('night')
+          classlist.remove('light')
+        }
+      }
+      function switchColorScheme(scheme){
+        prefersReducedMotion = localStorage.getItem('reduce-motion') ? {fancy: false, plain: true, media: matchMedia('(prefers-reduced-motion)').matches}[localStorage.getItem('reduce-motion')] : matchMedia('(prefers-reduced-motion)').matches
+        if(!document.startViewTransition || prefersReducedMotion){
+          switchColorScheme4Real(scheme)
+          return
+        }
+        const x = innerWidth
+        const y = innerHeight
+        const endRadius = Math.hypot(
+          Math.max(x, innerWidth - x),
+          Math.max(y, innerHeight - y),
+        )
+        document.startViewTransition(()=>switchColorScheme4Real(scheme)).ready.then(() => {
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0 at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+              ]
+            },
+            {
+              duration: 400,
+              easing: "ease-in",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        })
+      }
+      window.addEventListener("focus", ()=>{
+        const newOpt = localStorage.getItem('color-scheme') || 'auto'
+        if(newOpt !== colorSchemeOpt){
+          colorSchemeOpt = newOpt
+          const scheme = colorSchemeOpt==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorSchemeOpt
+          if(scheme==='light'){
+            document.getElementById("sun").style.display = "none"
+            document.getElementById("moon").style.display = ""
+            let classlist = document.querySelector("html").classList
+            classlist.remove('night')
+            classlist.add('light')
+          }else{
+            document.getElementById("sun").style.display = ""
+            document.getElementById("moon").style.display = "none"
+            let classlist = document.querySelector("html").classList
+            classlist.add('night')
+            classlist.remove('light')
+          }
+        }
+      })
+    </script>
+    <script>
+      localStorage = localStorage || {getItem: ()=>(undefined)};
+      document.addEventListener("DOMContentLoaded", ()=>{
+        document.querySelectorAll('a[href^="#"]').forEach(elem=>{
+          elem.addEventListener("click", evt=>{
+            if((localStorage.getItem("backbtn-func")||"hook")==="hook"){
+              evt.preventDefault();
+              const anchor = decodeURI(elem.href.slice(elem.href.search('#')));
+              history.replaceState(history.state, null, anchor);
+              document.getElementById(anchor.slice(1)).scrollIntoView({behavior: "smooth"});
+            }
+          })
+        })
+        document.querySelectorAll('a[href^="#"]').forEach(elem=>{
+          elem.addEventListener("click", evt=>{
+            if((localStorage.getItem("backbtn-func")||"hook")!=="hook"){
+              anchorClickCount++;
+            }
+            setTimeout(()=>history.replaceState({anchorClickCount: anchorClickCount}, null, ''), 10);
+          })
+        })
+      })      
+      let anchorClickCount = 0;
+      history.replaceState({anchorClickCount: 0}, null, '');
+      if(localStorage.getItem("backbtn-func")==="session"){
+        function pushHistory(url){
+          let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
+          arr.push(url);
+          sessionStorage.setItem('history', JSON.stringify(arr));
+        }
+        function popHistory(){
+          let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
+          let url = arr.pop() || '/';
+          sessionStorage.setItem('history', JSON.stringify(arr));
+          return url;
+        }
+        if(sessionStorage.getItem('backing')){
+          sessionStorage.removeItem('backing');
+        }else{
+          pushHistory(document.referrer || '/');
+        }
+      }
+    </script>
+    <style>
+      @media screen and (max-width: 1468px) {
+        .hide-on-phone{
+          margin: 0px !important;
+          border-bottom-left-radius: 0px !important;
+          border-top-right-radius: 0px !important;
+          border-top: none !important;
+          border-left: none !important;
+        }
+      }
+    </style>
+    
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/features/">特性修改</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链抽奖机</a></li><!--
+     --><!--
+       --><li><a href="/problems/">每?一题</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&text=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&is_video=false&description=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[TSCTF-J2026]圆周率の出题人反思&body=Check out this article: https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&name=[TSCTF-J2026]圆周率の出题人反思&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&t=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%83%95%E3%83%A9%E3%82%B0%E3%81%AE%E6%81%8B"><span class="toc-number">1.</span> <span class="toc-text">フラグの恋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MisC"><span class="toc-number">2.</span> <span class="toc-text">!?MisC?!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E5%AD%97%E7%9A%84%E7%A7%98%E5%AF%86"><span class="toc-number">3.</span> <span class="toc-text">文字的秘密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MazeGarden"><span class="toc-number">4.</span> <span class="toc-text">MazeGarden</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MiscEverythingUp"><span class="toc-number">5.</span> <span class="toc-text">MiscEverythingUp</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+      <style>
+        @media screen and (max-width: 630px) {
+          .hide-on-phone{
+            margin: 0 !important;
+            width: 100%;
+            border: none !important;
+            border-radius: 0 !important;
+            border-bottom: gray 1px solid !important;
+          }
+        }
+        @media screen and (max-width: 630px) {
+          #menu{
+            display: none !important;
+          }
+        }
+      </style>
+    
+    <div class="content index py4 ">
+        
+          <!-- <button onclick="" style="border: 1px solid; border-radius: 5px; background: none; color: inherit; font-size: 20px; cursor: pointer; width: fit-content; margin-bottom: 10px; font-family: inherit;">&lt; 返回</button> -->
+          <button id="backbtn" onclick="onBackbtnClick()" style="border: 1px solid; border-radius: 5px; background: none; color: inherit; font-size: 20px; cursor: pointer; width: fit-content; margin-bottom: 10px; font-family: inherit;">&lt; 返回</button>
+          <script>
+            function onBackbtnClick(){
+              switch (localStorage.getItem("backbtn-func")) {
+                case "referer":
+                  location.href = document.referrer || '/';
+                  break;
+
+                case "history":
+                  history.back();
+                  break;
+              
+                case "session":
+                  sessionStorage.setItem('backing', 1);
+                  location.href = popHistory();
+                  break;
+
+                case "count":
+                case "hook":
+                default:
+                  history.go(-1-((history.state || {}).anchorClickCount ?? anchorClickCount ?? 0));
+                  break;
+              }
+            }
+            if(localStorage.getItem("backbtn-func")==="none"){
+              document.getElementById("backbtn").style.display = 'none';
+            }
+          </script>
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        [TSCTF-J2026]圆周率の出题人反思
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">圆周率</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-10-13T20:18:54.000Z" class="dt-published" itemprop="datePublished">2026-10-14</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <style>
+    figcaption {
+        text-align: center;
+    }
+</style>
+
+<!-- # TSCTF-J2026 出题人赛后总结 <span style="font-size:0.8em">by 圆周率</span> -->
+
+<p><a href="出题人赛后总结 - 圆周率.pdf">点击此处访问PDF版</a></p>
+<p>一年一度的TSCTF-J就快要结束了，当初还在赛场上解题的我没想到转眼间就成为了出史人，看着大家比赛了。这次比赛，颇有收获，颇有感触……</p>
+<hr/>
+
+<p>“MiscEverythingUp”是我最先出的题，当时就是想出一道所有方向都包含的题目，看看能不能吸引各个方向的人去做其他方向的内容，所以每一部分的考点设置都比较简单；<br>随后，我确定了宣讲的主题《重生之我要成为旮旯给木大蛇》，所以就决定出一道与旮旯给木有关的题目，这就是“フラグの恋”；<br>做了些人造文字有关的题，因为实在没找到对照表，于是从猜测开始手推出了对照，觉得可以作为一道考题，就有了“文字的秘密”；<br>后来re需要一道花+OLLVM的迷宫题，我觉得我可以一试，于是就出了“MazeGarden”；<br>最后本来是在《人类对〈华强买瓜〉的开发程度还不到1%》时期决定出一道AI魔改视频的“华强买flag”，但是因为感觉视频生成AI有点贵，也不知道哪个模型比较好，所以一直拖到国庆，最后决定临时换题，考虑到大量的新生赛出了MC题，并且最近又在倒腾FPGA，我就想到可以设计一个红石电路来判题，这就是最后完成的红石逆向题“!?MisC?!”。</p>
+<table>
+<thead>
+<tr>
+<th align="center">题目名称</th>
+<th align="center">类型</th>
+<th align="center">赛前难度预估</th>
+<th align="center">实际解数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">!?MisC?!</td>
+<td align="center">Misc</td>
+<td align="center">3&#x2F;10</td>
+<td align="center">6</td>
+</tr>
+<tr>
+<td align="center">MiscEverythingUp</td>
+<td align="center">Misc+Re+Crypto+Web+Pwn</td>
+<td align="center">3-6&#x2F;10</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">フラグの恋</td>
+<td align="center">Misc+Re(?)</td>
+<td align="center">5&#x2F;10</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td align="center">MazeGarden</td>
+<td align="center">Re</td>
+<td align="center">5&#x2F;10</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td align="center">文字的秘密</td>
+<td align="center">Misc</td>
+<td align="center">7&#x2F;10</td>
+<td align="center">6</td>
+</tr>
+</tbody></table>
+<p>比赛开始后，先放出的是我认为偏难的<code>フラグの恋</code>和<code>文字的秘密</code>，<code>フラグの恋</code>于下午2点40分左右出现首解，而<code>文字的秘密</code>在晚上11点30左右出现首解，据说还是Agent梭出来的，能对图像题进行求解，这个AI的多模态确实给力；<br>第二天放出<code>!?MisC?!</code>、<code>MiscEverythingUp</code>和<code>MazeGarden</code>，虽然我觉得很难梭的红石逆向在开赛前就在内部测试被GPT 18分钟秒了，但是也撑了快1h才出现第一解，客串的RE撑了不到3h，也被攻下；<br>最后的全栈题虽然是全栈，但是每个方向的考点都很基础才对，最后撑了一天半才被解出，从提交记录来看，似乎是都被我原封不动copy到容器里的我的博客吸引火力，去读我的WP和解博客里面的题目了……</p>
+<p>总体来说，我觉得解出我题目的“人”实在不算多，于是在比赛末尾放出了大量hint，有两位选手根据hint解出了<code>文字的秘密</code>，然而在看WP的时候才发现，似乎有选手没有看到hint，在此题遗憾离场……另外还有<code>フラグの恋</code>题依然卡在第一关的……What can I say……真的再提示都把答案糊脸上了……</p>
+<p>比赛平稳进行到最后阶段， <del>非常值得称赞的是，本次比赛没有出现作弊现象</del> ，等一下，这个是什么……</p>
+<p><img src="/image%20(9).png" alt="alt text"></p>
+<p>……言出法随啊，刚写完没有作弊现象就出现串flag的了！拷打，拷打，必须拷打！</p>
+<p><img src="/image%20(10).png" alt="alt text"></p>
+<p>在此处强调，可以玩“神秘海鲜市场”的梗，但是 <strong>绝对不能上海鲜市场买卖flag！这是一个原则问题，没有讨论的余地！</strong> 在此次审计事件中由于二者并未出现金钱交易，故没有进行特别通报，封禁双方队伍，取消一切评奖资格。</p>
+<figure>
+    <img src="image.png"/>
+    <figcaption>动态附件立大功</figcaption>
+</figure>
+
+<p>比赛结束，大家的反馈也陆续交到了我们手上，可以看得出来大家都认为此次比赛整体偏难，也普遍认可我们的题目质量。通过比赛，对Misc方向感兴趣的同学从13位涨到了20位，是所有方向中涨幅最大的，可见Misc方向的创新题吸引了不少同学，下面总结一下我的题目的好评&#x2F;差评</p>
+<table>
+<thead>
+<tr>
+<th align="center">题目名称</th>
+<th align="center">有趣&#x2F;高质量</th>
+<th align="center">无趣&#x2F;低质量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">文字的秘密</td>
+<td align="center">3</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">!?MisC?!</td>
+<td align="center">2</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">MiscEverythingUp</td>
+<td align="center">2</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">フラグの恋</td>
+<td align="center">2</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">MazeGarden</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<p>由此可见，大家对于我的题目还是比较认可的</p>
+<p>另外还有一列想锤的出题人，这个嘛……</p>
+<figure>
+    <img src="image-1.png">
+    <figcaption>大家想锤谁真是一目了然啊.jpg</figcaption>
+</figure>
+
+<p>有些人没有写明想锤谁，估计是不知道出题人是谁，但是我在每一道自己出的题目里都有露脸，所以想锤我的都知道该锤谁（x</p>
+<p>最后我在“最想锤的出题人”挑战中获得了4次（<code>圆周率</code>x3 + <code>π</code>x1）的好成绩，你也来试试吧！</p>
+<p>玩笑归玩笑，但是我这次出题确实有一些出史嫌疑，给各位师傅滑跪了 orz</p>
+<p>WP差不多集齐了，在 <del>我的暴论</del> 出题组的WP要求下，各位师傅交上来的WP总算比较规范了，下面，我将结合各位在WP中的思路分题目进行复盘，探讨更好的思路与解法，作为出题人WP的一个补充</p>
+<hr/>
+
+<h2 id="フラグの恋"><a href="#フラグの恋" class="headerlink" title="フラグの恋"></a>フラグの恋</h2><table>
+<thead>
+<tr>
+<th align="center">解出数</th>
+<th align="center">WP提交数（成功&#x2F;失败）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">8</td>
+<td align="center">9（5&#x2F;4）</td>
+</tr>
+</tbody></table>
+<p>フラグの恋出得实在是有些套娃了，主要是看到misc全考查创新题去了，所以就塞了一些misc基础进去，下面梳理一下：</p>
+<p>首先是第一关，未解出的4人中有3人卡在了这一关（圆周率：何意味……）</p>
+<p>首先，这里面3人有2人锤过我，我提示了“这是一个宣讲讲过的内容”，然后一个就去考虑ook和bf了，但这两个字符数明显不符合（3、6），即便是通过了这一关的5人，也有1人先想到的是哈基米和佛曰，气的我去翻了一下宣讲的录像，结果发现当时忘记强调<strong>兽音的特点是字母表含有4个字符，使用时只要找到四个字符的正确排列即可</strong>……好吧，我的我的 orz，最后的hint1就是这个意思，不过似乎提示到盲区了，没有人解出……</p>
+<p>不过AI大人提出了不同的见解，解出的AI很大一部分都是手撕兽音的，其中提到<strong>兽音的特点为开头3字符与结尾字符构成字母表，顺序为421……3</strong>，于是我找到网站测试，发现确实如此</p>
+<p><img src="/image-2.png" alt="alt text"></p>
+<p><img src="/image-3.png" alt="alt text"></p>
+<p>于是，即便你不知道“鸡你太美”为何方神圣，也可以通过这个规律找到正确的顺序</p>
+<p>接下来就是enc文件，有不少选手是通过文件头找到软件的，非常好，符合我在宣讲时的解法，不过由于不会解密的人太多了，直接搜.enc文件解密其实也是可以找到的~</p>
+<p>然后是lz4文件，这个没什么好说的</p>
+<p>接下来是视频图种，这个是有一个工具生成的，藏得还算隐蔽，但是用法和图种一致，但是差了个密码，这里不少AI是通过弱口令爆破出来的，也不为是一种办法……但我的本意是通过盯帧发现二维码，忘记114514是弱口令了，可以<code>?d?d?d?d?d?d</code>爆破，rockyou里面也有（究竟是谁在用这么恶臭的密码啊 恼）……</p>
+<p>解到的旮旯给木选手和AI倒是基本走了预期路线，解包魔改rpa，还原rpyc，然后发现一个奇怪的<code>piz.yek</code></p>
+<p>对了，这个不是基于现实改编的，这个是基于Ren’Py代码示例改编的</p>
+<p><img src="/image-4.png" alt="alt text"></p>
+<p>咳咳，回到正题，这个<code>piz.yek</code>看着就挺怪，稍加脑电波就发现这提示文件的字节是反转的，这里从文件末尾可以看出，这个是逐十六进制反转，接下来就是misc基础内容，考察零宽字符、压缩文件和图像变换</p>
+<p>这几层文件的提示基本都在注释里，暗示非常明显，如“零宽字符”对应“就在这里<strong>你看不见</strong>吗”</p>
+<p>下一层rockyou看似nonsense，但这其实<strong>是一个弱密码字典的名字，在CTF中非常常见，没认出来的同学记好笔记！</strong></p>
+<p>接下来是掩码爆破，提示中的验证码按常理就是六位数字，可以爆破，有选手一开始以为是和验证码生成有关，要说这个和验证码生成有什么关系嘛……这个确实是验证码（x</p>
+<p><img src="/image-5.png" alt="alt text"></p>
+<p>然后得到的二维码比较奇怪，但是AI基本都认出来了是极坐标变换，这里没有卡点，下面扩展一种变换，叫ZigZag，比较奇怪，二维码变成下面那样，要认得出来，去年考了几次</p>
+<p><img src="/enc.png" alt="alt text"></p>
+<p>由此，扫到我们盒子的钥匙（有选手就心急交上去了）</p>
+<p>还有一个target，不出所料AI都是手撕存档的，不过从WP上没有看到被我的加密逻辑阴到的具体情况，不知道实际上有没有卡住AI一段时间（即所谓“诅咒”）</p>
+<p>不过AI似乎撕得不够彻底，如果直接手撕pickle，就可以看到有两个地方有glitch过的target迹象，一个是历史log（即点击history按钮显示的内容），另一个是回退历史（即向上滚轮回退的内容），一开始没有注意到后面的内容，所以测题的时候直接被AI捡漏拿到flag了（x</p>
+<p>接下来就是解密盒子了，不出所料，AI大人逆向乱杀，没一个是不逆向解出来的，有些AI是直接全部逆出来，但是最后还是有一个不可逆的组件，只能通过枚举映射找到可能的原像，所以逻辑就变成将target恢复到这个组件，然后枚举输入组合，尝试找到原像，这里也是可以的，应该要比我的不逆向脚本快不少，但是逆向上需要花的精力我认为超出了它带来的收益，所以，手搓的同学不要学习，AI的同学多花点头肯！</p>
+<p>这里还有一个选手选择让AI帮他<strong>hook住输入对象的方法，从而log出运算逻辑，做到不逆向的黑盒变白盒</strong>，这与<a target="_blank" rel="noopener" href="https://github.com/BUPTMerak/TSCTF-J-2025#pythons-shed-skin">TSCTF-J 2025的<code>Python&#39;s Shed Skin</code></a>的<a target="_blank" rel="noopener" href="https://github.com/BUPTMerak/TSCTF-J-2025/blob/main/wp.md#pythons-shed-skin">预期解法</a>属于是异曲同工之妙，值得大家（特别是RE手）学习借鉴！（而且本题所有运算均通过CPython API实现，所以理论上可以log出所有逻辑，比那题简单不少）</p>
+<p>小结一下，本题的卡点实在是让我没有想到，不过AI都能过说明那些选手还是在坚持古法思考的，这一点值得嘉奖，但是适当使用AI也可以增进我们的技术，就像前面提到的兽音加密的特点那样，还是让我从中学到了不少新姿势；另外出现hook方法逆向pyd的WP真的是我完全没有想到的，看到这份WP就让我想起了去年的招新赛，能用到这样的方法解题，与我的笨方法不知道好到哪里去了</p>
+<h2 id="MisC"><a href="#MisC" class="headerlink" title="!?MisC?!"></a>!?MisC?!</h2><table>
+<thead>
+<tr>
+<th align="center">解出数</th>
+<th align="center">WP提交数（成功&#x2F;失败）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">6</td>
+<td align="center">9（4&#x2F;5）</td>
+</tr>
+</tbody></table>
+<p>首先看一下提交上来的失败原因，5人中有2人是不熟悉红石电路，故草草开溜，可以理解；另外3人均使用AI解题，有2人明确指出，AI发现了最关键的232个拉杆，但很明显的是，<strong>AI没有观测其他红石电路，而是选择枚举各种可能性爆破flag，甚至一度导致平台禁止其提交flag</strong>，而选手也很明显没有进入过存档，否则不可能不提示AI将注意力从拉杆移开去寻思电路连接逻辑，另外1人没有明确AI进度，但大概率也是爱莫能助，只能看着AI燃烧token</p>
+<p>提交上来的4位选手全部明确使用AI辅助解题，其中2位应该是一把梭出来了；另有1位让AI将电路转化为Verilog；最后1位选手可能大部分是手搓的，使用AI辅助读取目标数据，但是由于时间原因，未能对其展开描述</p>
+<p>这里也回答一下这位选手的提问，我在本题中未使用AI设计&#x2F;搭建该电路，最后写入结构时使用了手搓的脚本如下（当然，api用法参考了AI）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_1337ed</span>(<span class="params">flag</span>):</span><br><span class="line">    LEET_MAP = &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    head, content, tail = re.<span class="keyword">match</span>(<span class="string">r&#x27;(.*?\&#123;)(.*?)(\&#125;)&#x27;</span>, flag).groups()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> head + <span class="string">&#x27;&#x27;</span>.join(random.choice(LEET_MAP.get(i, [i])) <span class="keyword">for</span> i <span class="keyword">in</span> content) + tail</span><br><span class="line"></span><br><span class="line">flag = get_1337ed(<span class="string">&#x27;TSCTF-J&#123;!?redstone_reverse?!&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Flag:&#x27;</span>, flag)</span><br><span class="line"></span><br><span class="line"><span class="built_in">open</span>(<span class="string">&#x27;flag.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>).write(flag)</span><br><span class="line"></span><br><span class="line">reg_init = random.randint(<span class="number">0b0000</span>, <span class="number">0b1111</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Reg val:&#x27;</span>, reg_init)</span><br><span class="line"></span><br><span class="line">add_value = random.randint(<span class="number">0b0000</span>, <span class="number">0b1111</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Addval:&#x27;</span>, add_value)</span><br><span class="line"></span><br><span class="line">mix = <span class="keyword">lambda</span> x: <span class="built_in">int</span>(<span class="string">&#x27;&#x27;</span>.join([<span class="string">f&#x27;<span class="subst">&#123;x:<span class="number">0</span>&gt;4b&#125;</span>&#x27;</span>[::-<span class="number">1</span>][i-<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>]])[::-<span class="number">1</span>], <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">reg_val = reg_init</span><br><span class="line">rom_val = []</span><br><span class="line"><span class="keyword">for</span> i_value <span class="keyword">in</span> <span class="built_in">map</span>(<span class="keyword">lambda</span> x: <span class="built_in">int</span>(x, <span class="number">16</span>), flag.encode().<span class="built_in">hex</span>()):</span><br><span class="line">    reg_val = mix(i_value ^ reg_val) + add_value</span><br><span class="line">    rom_val.append(reg_val)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> nbtlib</span><br><span class="line"><span class="keyword">import</span> gzip</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChunkTickets</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, path</span>):</span><br><span class="line">        <span class="variable language_">self</span>.file_path = path</span><br><span class="line">        <span class="keyword">with</span> gzip.<span class="built_in">open</span>(path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="variable language_">self</span>.nbt_data = nbtlib.File.parse(f)</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.forceloaded = <span class="built_in">set</span>((<span class="built_in">int</span>(chunk[<span class="string">&#x27;chunk_pos&#x27;</span>][<span class="number">0</span>]), <span class="built_in">int</span>(chunk[<span class="string">&#x27;chunk_pos&#x27;</span>][<span class="number">1</span>])) <span class="keyword">for</span> chunk <span class="keyword">in</span> <span class="variable language_">self</span>.nbt_data[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;tickets&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_forceload</span>(<span class="params">self, cx, cz</span>):</span><br><span class="line">        <span class="keyword">if</span> (cx, cz) <span class="keyword">in</span> <span class="variable language_">self</span>.forceloaded:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        new_ticket = nbtlib.Compound(&#123;</span><br><span class="line">            <span class="string">&#x27;chunk_pos&#x27;</span>: nbtlib.<span class="type">List</span>[nbtlib.Int]([nbtlib.Int(cx), nbtlib.Int(cz)]),</span><br><span class="line">            <span class="string">&#x27;level&#x27;</span>: nbtlib.Int(<span class="number">31</span>),</span><br><span class="line">            <span class="string">&#x27;type&#x27;</span>: nbtlib.String(<span class="string">&#x27;forced&#x27;</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="variable language_">self</span>.nbt_data[<span class="string">&#x27;data&#x27;</span>][<span class="string">&#x27;tickets&#x27;</span>].append(new_ticket)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_forceload_from_to</span>(<span class="params">self, start, end</span>):</span><br><span class="line">        <span class="keyword">for</span> cx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">min</span>(start[<span class="number">0</span>], end[<span class="number">0</span>])//<span class="number">16</span>, <span class="built_in">max</span>(start[<span class="number">0</span>], end[<span class="number">0</span>])//<span class="number">16</span>+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> cz <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">min</span>(start[<span class="number">1</span>], end[<span class="number">1</span>])//<span class="number">16</span>, <span class="built_in">max</span>(start[<span class="number">1</span>], end[<span class="number">1</span>])//<span class="number">16</span>+<span class="number">1</span>):</span><br><span class="line">                <span class="variable language_">self</span>.add_forceload(cx, cz)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">save</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">with</span> gzip.<span class="built_in">open</span>(<span class="variable language_">self</span>.file_path, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="variable language_">self</span>.nbt_data.write(f)</span><br><span class="line"></span><br><span class="line">chunk_tickets = ChunkTickets(<span class="string">&#x27;!_MisC_!/dimensions/minecraft/overworld/data/minecraft/chunk_tickets.dat&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> amulet</span><br><span class="line"><span class="keyword">import</span> amulet_nbt</span><br><span class="line"></span><br><span class="line">level = amulet.load_level(<span class="string">&#x27;!_MisC_!&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_io_buffer</span>(<span class="params">x0, y0, z0, capacity</span>):</span><br><span class="line">    nbt = amulet_nbt.load(<span class="string">&#x27;structure/io_buffer.nbt&#x27;</span>).compound</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(capacity):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Writing I/O Buffer <span class="subst">&#123;i+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;capacity&#125;</span>...&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> nbt[<span class="string">&#x27;blocks&#x27;</span>]:</span><br><span class="line">            dx, dy, dz = <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x.py_int, b[<span class="string">&#x27;pos&#x27;</span>])</span><br><span class="line">            p = nbt[<span class="string">&#x27;palette&#x27;</span>][b[<span class="string">&#x27;state&#x27;</span>].py_int]</span><br><span class="line">            <span class="keyword">if</span> p[<span class="string">&#x27;id&#x27;</span>].py_str == <span class="string">&#x27;minecraft:air&#x27;</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;nbt&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> b:</span><br><span class="line">                level.set_version_block(x0 + dx + i * <span class="number">9</span>, y0 + dy - <span class="number">3</span>, z0 + dz, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                        amulet.Block(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), <span class="built_in">dict</span>(p.get(<span class="string">&#x27;properties&#x27;</span>, &#123;&#125;))))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                level.set_version_block(x0 + dx + i * <span class="number">9</span>, y0 + dy - <span class="number">3</span>, z0 + dz, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                        amulet.Block(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), <span class="built_in">dict</span>(p.get(<span class="string">&#x27;properties&#x27;</span>, &#123;&#125;))),</span><br><span class="line">                                        amulet.api.block_entity.BlockEntity(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), x0 + dx + i * <span class="number">9</span>, y0 + dy - <span class="number">3</span>, z0 + dz, b[<span class="string">&#x27;nbt&#x27;</span>]))</span><br><span class="line">    </span><br><span class="line">    level.set_version_block(x0 + capacity * <span class="number">9</span>, y0, z0 + <span class="number">10</span>, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                            amulet.Block(<span class="string">&#x27;minecraft&#x27;</span>, <span class="string">&#x27;redstone_torch&#x27;</span>, &#123;<span class="string">&#x27;lit&#x27;</span>: amulet.StringTag(<span class="string">&quot;true&quot;</span>)&#125;))</span><br><span class="line">    level.set_version_block(x0 + capacity * <span class="number">9</span>, y0, z0 + <span class="number">31</span>, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                            amulet.Block(<span class="string">&#x27;minecraft&#x27;</span>, <span class="string">&#x27;redstone_torch&#x27;</span>, &#123;<span class="string">&#x27;lit&#x27;</span>: amulet.StringTag(<span class="string">&quot;true&quot;</span>)&#125;))</span><br><span class="line">    </span><br><span class="line">    chunk_tickets.add_forceload_from_to((x0, z0), (x0 + capacity * <span class="number">9</span>, z0 + <span class="number">40</span>))</span><br><span class="line"></span><br><span class="line">write_io_buffer(<span class="number">48</span>, -<span class="number">60</span>, <span class="number">41</span>, <span class="built_in">len</span>(rom_val))</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_rom</span>(<span class="params">x0, y0, z0, rom_val</span>):</span><br><span class="line">    nbt = amulet_nbt.load(<span class="string">&#x27;structure/rom.nbt&#x27;</span>).compound</span><br><span class="line">    <span class="keyword">for</span> i, val <span class="keyword">in</span> <span class="built_in">enumerate</span>(rom_val):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Writing ROM <span class="subst">&#123;i+<span class="number">1</span>&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(rom_val)&#125;</span>...&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> nbt[<span class="string">&#x27;blocks&#x27;</span>]:</span><br><span class="line">            dx, dy, dz = <span class="built_in">map</span>(<span class="keyword">lambda</span> x: x.py_int, b[<span class="string">&#x27;pos&#x27;</span>])</span><br><span class="line">            p = nbt[<span class="string">&#x27;palette&#x27;</span>][b[<span class="string">&#x27;state&#x27;</span>].py_int]</span><br><span class="line">            <span class="keyword">if</span> p[<span class="string">&#x27;id&#x27;</span>].py_str == <span class="string">&#x27;minecraft:air&#x27;</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">if</span> <span class="string">&#x27;nbt&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> b:</span><br><span class="line">                <span class="keyword">if</span> dx == <span class="number">7</span> <span class="keyword">and</span> dz <span class="keyword">in</span> [<span class="number">14</span>, <span class="number">17</span>, <span class="number">20</span>, <span class="number">23</span>]:</span><br><span class="line">                    level.set_version_block(x0 + dx + i * <span class="number">8</span>, y0 + dy - <span class="number">2</span>, z0 + dz, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                            amulet.Block(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), <span class="built_in">dict</span>(p.get(<span class="string">&#x27;properties&#x27;</span>, &#123;&#125;))|&#123;<span class="string">&#x27;powered&#x27;</span>: [amulet.StringTag(<span class="string">&#x27;False&#x27;</span>), amulet.StringTag(<span class="string">&#x27;true&#x27;</span>)][<span class="built_in">bool</span>(val&amp;(<span class="number">1</span>&lt;&lt;((dz-<span class="number">14</span>)//<span class="number">3</span>)))]&#125;))</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    level.set_version_block(x0 + dx + i * <span class="number">8</span>, y0 + dy - <span class="number">2</span>, z0 + dz, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                            amulet.Block(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), <span class="built_in">dict</span>(p.get(<span class="string">&#x27;properties&#x27;</span>, &#123;&#125;))))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                level.set_version_block(x0 + dx + i * <span class="number">8</span>, y0 + dy - <span class="number">2</span>, z0 + dz, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                        amulet.Block(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), <span class="built_in">dict</span>(p.get(<span class="string">&#x27;properties&#x27;</span>, &#123;&#125;))),</span><br><span class="line">                                        amulet.api.block_entity.BlockEntity(*p[<span class="string">&#x27;id&#x27;</span>].py_str.split(<span class="string">&#x27;:&#x27;</span>), x0 + dx + i * <span class="number">8</span>, y0 + dy - <span class="number">2</span>, z0 + dz, b[<span class="string">&#x27;nbt&#x27;</span>]))</span><br><span class="line">    </span><br><span class="line">    chunk_tickets.add_forceload_from_to((x0, z0), (x0 + <span class="built_in">len</span>(rom_val) * <span class="number">8</span>, z0 + <span class="number">26</span>))</span><br><span class="line"></span><br><span class="line">write_rom(<span class="number">48</span>, -<span class="number">60</span>, <span class="number">90</span>, rom_val)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_reg</span>(<span class="params">x0, y0, z0, reg_val</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        x, y, z = x0, y0, z0 + i*<span class="number">3</span></span><br><span class="line">        b = level.get_block(x, y, z, <span class="string">&#x27;minecraft:overworld&#x27;</span>)</span><br><span class="line">        level.set_version_block(x, y, z, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                amulet.Block(b.namespace, b.base_name, b.properties | &#123;<span class="string">&#x27;powered&#x27;</span>: amulet.StringTag(<span class="string">&#x27;true&#x27;</span>) <span class="keyword">if</span> reg_val&amp;(<span class="number">1</span>&lt;&lt;i) <span class="keyword">else</span> amulet.StringTag(<span class="string">&#x27;false&#x27;</span>)&#125;))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Writing reg...&#x27;</span>)</span><br><span class="line">write_reg(<span class="number">28</span>, -<span class="number">60</span>, <span class="number">106</span>, reg_init)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_addval</span>(<span class="params">x0, y0, z0, addval</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        x, y, z = x0 + i*<span class="number">4</span>, y0, z0 + i*<span class="number">8</span></span><br><span class="line">        b = level.get_block(x, y, z, <span class="string">&#x27;minecraft:overworld&#x27;</span>)</span><br><span class="line">        level.set_version_block(x, y, z, <span class="string">&#x27;minecraft:overworld&#x27;</span>, (<span class="string">&#x27;java&#x27;</span>, (<span class="number">26</span>, <span class="number">3</span>)),</span><br><span class="line">                                amulet.Block(b.namespace, b.base_name, b.properties | &#123;<span class="string">&#x27;powered&#x27;</span>: amulet.StringTag(<span class="string">&#x27;true&#x27;</span>) <span class="keyword">if</span> addval&amp;(<span class="number">1</span>&lt;&lt;i) <span class="keyword">else</span> amulet.StringTag(<span class="string">&#x27;false&#x27;</span>)&#125;))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Writing addval...&#x27;</span>)</span><br><span class="line">write_addval(<span class="number">7</span>, -<span class="number">60</span>, <span class="number">134</span>, add_value)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Saving chunks...&#x27;</span>)</span><br><span class="line">chunk_tickets.save()</span><br><span class="line">level.save()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>所以不同的附件会有不同的初始值、加数和flag</p>
+<p>另外，两位一把梭的选手的AI是通过flag首字反推初始状态的，但是，其实初始状态被脚本写在由锁存模式中继器构成的寄存器上了，可以通过powered属性读取</p>
+<p>一位选手选择了把自己不熟悉的红石电路让AI转换为Verilog，然后对其进行分析，将未知事物转换为已知事物，也是一种非常好用的方式</p>
+<p>至于详细的解法分析，可以看看这道题的出题人WP，应当是写的还算详细了，这里不再过多赘述</p>
+<h2 id="文字的秘密"><a href="#文字的秘密" class="headerlink" title="文字的秘密"></a>文字的秘密</h2><table>
+<thead>
+<tr>
+<th align="center">解出数</th>
+<th align="center">WP提交数（成功&#x2F;失败）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">6</td>
+<td align="center">7（4&#x2F;3）</td>
+</tr>
+</tbody></table>
+<p>依旧分析痛点，提交上来未能解出的3份WP中有1份为所有对应均为与其积累的已知对应匹配，故光速开溜；剩下的2位均卡在3.png，但其中一位可能没有看到我最后一点时间放出的付费hint，另一位购买了hint仍未解出；若不放出hint，成功的4位选手中有1位卡在3.png，另有1位卡在最后的secret.ttf</p>
+<p>具体的解题过程就不说了，可以看出题人WP</p>
+<p>下面讲一下几条基本思路：</p>
+<p>首先是，遇到一个人造文字，我们看到要考虑是否存在已知映射，如本题的1.png和3.png，这里1.png仅有1人是直接使用的Runes文字的对照表（有可能还是AI看出来的），3.png由于实在无法推出来，几个检索能力强的AI倒是找到了中华语字的对照表……</p>
+<p>其次，遇到不确定的也不用慌，如果是简单映射，可以从常见词（a、the等等）或主题词入手，逐步推到映射表，这里2.png的映射表是在互联网上找不到的，因为这是我随机挑出来的26个NerdFont打乱后形成的映射</p>
+<p>对于3.png，如果没有检索到相关信息，就可以使用hint3，里面是声声慢与其人造文字表示，由此可以对照得到规则，注意。汉语拼音不是一个完整部分，而是由声母、韵母等元素组成的，所以对于提示，应当把每一个部分拆开分析，而不是整体映射</p>
+<p>secret.ttf里面考察的是连字特性，如果购买的hint4，就会看到portal.html使用了特性功能，由此寻找GSUB表，就可以得到flag</p>
+<p>这里有看见编程读取的，也有使用工具导出连字规则的，都是可行的方法，选择你喜欢的就好</p>
+<h2 id="MazeGarden"><a href="#MazeGarden" class="headerlink" title="MazeGarden"></a>MazeGarden</h2><table>
+<thead>
+<tr>
+<th align="center">解出数</th>
+<th align="center">WP提交数（成功&#x2F;失败）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">9</td>
+<td align="center">6（6&#x2F;0）</td>
+</tr>
+</tbody></table>
+<p>这个没有失败的WP……而且6位选手全为AI一把梭（其中含有不想一把梭但最后被AI自作主张解出flag的选手1位）</p>
+<p>就WP观察而言，花指令和平坦化对于AI真的和没有基本无差……What can I say……</p>
+<p>对了，有一位选手反应D-810不好使的，这个可能是花没有去完（毕竟一共500多朵），去完后最好还要全部Undefine，再定义Function，让IDA重新分析一下这段汇编，D-810是完全可以去平坦化的</p>
+<p>以及就是WP里似乎对于反调试的讲述很少……其实setup里面是有两条路的，根据isDebuggerPresent分为真和假，但是AI似乎一眼丁真鉴定为假就出了。</p>
+<p>最后给各位的CPU道个歉，我不是故意的，平时没有养成处理输入异常的习惯，没有对返回-1的情况进行处理，而是让主循环持续空转，给大家滑跪，但是我真没想到AI会不给stdin运行，并且这样会满载空转啊QwQ</p>
+<h2 id="MiscEverythingUp"><a href="#MiscEverythingUp" class="headerlink" title="MiscEverythingUp"></a>MiscEverythingUp</h2><table>
+<thead>
+<tr>
+<th align="center">解出数</th>
+<th align="center">WP提交数（成功&#x2F;失败）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">2</td>
+<td align="center">2（2&#x2F;0）</td>
+</tr>
+</tbody></table>
+<p>这个题的痛点……我可以说是注意力涣散吗（？</p>
+<p>在平台提交记录中有两位选手的AI都出现过将“每咕一题”的flag作为本题flag提交的情况……</p>
+<p>最后交上来的两份WP大概率都是AI一把梭的，不过思路倒是写的挺清晰，下面对一些细节做解释：</p>
+<p>首先是关于端口问题的，这个是由于比赛平台限制，题目最初为docker-compose，各个容器使用不同IP，然而比赛平台不支持docker-compose，各个容器使用同一个IP，且相互访问的方式为使用回环地址，所以为了尽可能不破坏选手体验感，这里将相同的port进行了一点点的移动，然后在两个SSRF点都进行了替换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> ipaddress</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlparse, urlunparse</span><br><span class="line"></span><br><span class="line">NONSENSEP = <span class="number">11451</span></span><br><span class="line">HOST_PORT = &#123;</span><br><span class="line">    <span class="string">&#x27;127.0.0.1&#x27;</span>: &#123;<span class="number">5000</span>: <span class="number">5000</span>&#125;,</span><br><span class="line">    <span class="string">&#x27;172.20.0.10&#x27;</span>: &#123;<span class="number">8000</span>: <span class="number">8002</span>, <span class="number">1337</span>: <span class="number">1337</span>&#125;,</span><br><span class="line">    <span class="string">&#x27;172.20.0.11&#x27;</span>: &#123;<span class="number">8000</span>: <span class="number">8001</span>, <span class="number">8888</span>: <span class="number">8888</span>&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">map_hostport</span>(<span class="params">host, port</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        addrinfo = socket.getaddrinfo(host, <span class="literal">None</span>)</span><br><span class="line">        <span class="keyword">for</span> addr <span class="keyword">in</span> addrinfo:</span><br><span class="line">            ip = ipaddress.ip_address(addr[<span class="number">4</span>][<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">if</span> ip.is_loopback:</span><br><span class="line">                ip = ipaddress.ip_address(<span class="string">&#x27;127.0.0.1&#x27;</span>)</span><br><span class="line">            <span class="keyword">for</span> host <span class="keyword">in</span> HOST_PORT:</span><br><span class="line">                <span class="keyword">if</span> ip == ipaddress.ip_address(host):</span><br><span class="line">                    <span class="keyword">return</span> (<span class="string">&#x27;127.0.0.1&#x27;</span>, HOST_PORT[host].get(port, NONSENSEP))</span><br><span class="line">        <span class="keyword">return</span> (host, port)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> (host, port)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">map_url</span>(<span class="params">url</span>):</span><br><span class="line">    parsed = urlparse(url)</span><br><span class="line">    host, port = map_hostport(parsed.hostname, parsed.port)</span><br><span class="line">    <span class="keyword">return</span> urlunparse(parsed._replace(netloc=<span class="string">f&#x27;<span class="subst">&#123;host&#125;</span>:<span class="subst">&#123;port&#125;</span>&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>本来以为对选手是无感的，但是忘记选手可以读内部容器的start.sh了，就出现了访问和实际端口不一样的情况，不过这个应该对于做题不是很有影响</p>
+<p>关于登录的设置，我还是下了一番功夫防止非预期</p>
+<p>首先是方式session复用，这里设置容器每次启动时的secret随机生成，这样过去的session就无效了；</p>
+<p>其次是防止从流量包中解出密码，这里用了RSA，确保密码无法被反解出来；</p>
+<p>然后是防止重放，在加密前拼接nonce，并且防止nonce复用，将nonce写入session，并且在内部简单维护一个nonce pool，将生成的nonce放入，使用后移除，如果nonce不在池中，则返回<code>nonce is out of dated</code>（其实应该用expired的，不知道我的英语怎么想的x）以防止nonce和session一起复用（如果在实际工程中，应该是使用时间作为nonce的一部分来确保过期后不可重放来着）</p>
+<p>这样一来，这个算法就还算稳固了，至少两位AI大人均未发现非预期（还得是全栈来设计这些需要跨方向交叉分析的地方）</p>
+<p>不过为了方便爆破，自定义的TOTP并未完全按照RFC标准，而是允许重复使用（按照标准，一个TOTP码应当只能使用一次，需要使用cache或其他服务记录已经使用过的TOTP避免重放）</p>
+<p>没想到的是，z3对于这个TOTP secret的求解如此之快，估计内部也进行了差分约简吧，但是从运行速度上，肯定还是要比我们的手推解法慢的，至于为什么会有多解符合，详见出题人WP对其的分析</p>
+<hr/>
+
+<p>接下来是一些碎碎念：</p>
+<p>本次比赛，Agent技术已经发展到了可谓炉火纯青之境界，现在的CTF比赛，倘若想不靠Agent而是手搓取得成绩，难矣！所以，如我这般排斥Agent而崇奉手搓，殆矣！想当初，我接触CTF纯粹是一个偶然：一个偶然了解到base64，一个偶然了解到与佛论禅，一个偶然看到有关安全的博客……但这就是我的来时路，自去年的暑假开始，我已经有了些许的CTF基础，由此开启moeCTF，正式步入CTF领域。一切都是那么的有趣，我一道接一道，一道解一道，遇到不会的，就去搜索相应的知识点……AK moe的那段时间，成就了我如今的90%也不为过，反而是入队以后，懈怠学习，各个方向都跟不上进度，所谓专精misc，掩饰罢了，实则实在力不从心……一直到去年将近寒假，TSCTF-J2026的出题被提上行程，我知道，检验我学习成果的时间到了：因为出题与解题不一样，解题只需要大概掌握知识点即可，而出题人要考虑的就多了，比如考点的具体考法、要不要变形、如何融入到题目当中、如何给出指引提示、非预期的防止等等，并且毕竟不能全出史题，考点肯定不能太偏又不能太正，而且要有一定的教育意义才好……处于此点，我没有主动给所有方向出题，而是打算尝试一下深耕自己的misc方向，仅仅应邀客串出了一道reverse，出的不是很好，但是我也在出题的过程中加深了对花指令的理解，以及学会了OLLVM（主要是控制流平坦化）的加入与去除，这些都是选手很难在比赛中获得的经验。虽说现在AI大人强的可怕，但是我还是尝试了能不能给AI使点绊子，但同时不伤及人类解题者，所以就有了图像、游戏的环节，这些在我印象里AI都不是很擅长（但是还是能梭的，可能是我的印象太陈旧了），这就是“文字的秘密”、“!?MisC?!”（以及被!?MisC?!取代的原定计划的“华强买flag”）出现的原因。不过最后还是好多一把梭的，而且有些脑回路还是出得太史了，人类解题者并没有我预期的那么多，还好最后“文字的秘密”放了点付费提示，有两位应当是人类解题者的选手购买后解出了本题，希望两位都没有在这道题留下遗憾吧！</p>
+<p>我现在也很迷茫，我感觉周围人都上车了，而我没有，我不知是不愿试错，还是先前的刻板印象太深，还是觉得自己无法掌握AI，还是觉得自己解题有规矩不烧心 <del>（烂梗扣钱！）</del> ，总之我无从下手——在这个AI飞速发展、以蓬勃气势要将世间几乎一切推翻重来的时代，<strong>我将要被淘汰</strong>。上车吧！还不算晚！可这日子却又还过得，我将近年龄一半的码龄、我自初中以来训练出来的自学能力，让我在此苟且偷生，慢是慢了点，但是自己写的代码不烧心 <del>（烂梗扣钱！x2）</del> ，算了罢！这不还活着吗？</p>
+<p>…………</p>
+<p>比赛间有一个小插曲，当时榜一的大一新生找到我，问我5年后CTF中会不会没有人类了。我想，在这个科技日新月异的时代，Agent或是AI的更新形态的能力指数增长，那时可能已经可以完全替代安全人员的作用了，或许，在那之后，CTF将以一种更纯粹的形态回归吧……</p>
+<hr/>
+
+<p>通过本次新生赛，我从各位师傅和AI身上学习了很多，希望各位也是如此。<strong>师傅们，我们，明年见！</strong></p>
+<p>　　祝<br>身体健康，学业有成！</p>
+<p style="text-align:right">圆周率</p>
+<p style="text-align:right">2026年10月14日凌晨 写于雁南园</p>
+
+<script>
+  // 修复图炸的情况
+  (new Array(...document.getElementsByTagName('img'))).forEach(
+      img=>{
+          if(img.src.split('/')[3]!='images'&&!img.src.startsWith(location.href.split("#")[0])){
+              console.log(`"${decodeURI(img.src.split('/').slice(-1))}" 貌似炸了`)
+              img.src=img.src.split('/').slice(-1)
+          }
+  })
+</script>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/features/">特性修改</a></li>
+        
+          <li><a href="/friends/">友链抽奖机</a></li>
+        
+          <li><a href="/problems/">每?一题</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E3%83%95%E3%83%A9%E3%82%B0%E3%81%AE%E6%81%8B"><span class="toc-number">1.</span> <span class="toc-text">フラグの恋</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MisC"><span class="toc-number">2.</span> <span class="toc-text">!?MisC?!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E5%AD%97%E7%9A%84%E7%A7%98%E5%AF%86"><span class="toc-number">3.</span> <span class="toc-text">文字的秘密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MazeGarden"><span class="toc-number">4.</span> <span class="toc-text">MazeGarden</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MiscEverythingUp"><span class="toc-number">5.</span> <span class="toc-text">MiscEverythingUp</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&text=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&is_video=false&description=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[TSCTF-J2026]圆周率の出题人反思&body=Check out this article: https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&title=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&name=[TSCTF-J2026]圆周率の出题人反思&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/&t=[TSCTF-J2026]圆周率の出题人反思"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025-2026
+    圆周率
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/features/">特性修改</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链抽奖机</a></li><!--
+     --><!--
+       --><li><a href="/problems/">每?一题</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

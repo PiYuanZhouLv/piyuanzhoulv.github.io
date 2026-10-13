@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang=zh class="night" style="font-size: 20px">
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="点击此处访问PDF版 选手视角处理花指令拿到可执行文件，先放到IDA里，发现程序加入了花指令干扰反编译，还有控制流平坦化，下面先处理花指令 简单手动patch几处后，发现花指令实在太多了，这里就需要我们写一个脚本去patch花指令，下面是花指令的几种类型：  直接跳转：jmp + junk 互补跳转：jz + jnz + junk 清零跳转：xor A, A + jz + junk 比较跳转：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[TSCTF-J2026]MazeGarden - 出题人WP">
+<meta property="og:url" content="https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/index.html">
+<meta property="og:site_name" content="圆周率的废纸堆">
+<meta property="og:description" content="点击此处访问PDF版 选手视角处理花指令拿到可执行文件，先放到IDA里，发现程序加入了花指令干扰反编译，还有控制流平坦化，下面先处理花指令 简单手动patch几处后，发现花指令实在太多了，这里就需要我们写一个脚本去patch花指令，下面是花指令的几种类型：  直接跳转：jmp + junk 互补跳转：jz + jnz + junk 清零跳转：xor A, A + jz + junk 比较跳转：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-3.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-4.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-5.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-6.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-7.png">
+<meta property="og:image" content="https://piyuanzhoulv.github.io/image-8.png">
+<meta property="article:published_time" content="2026-10-13T20:17:21.000Z">
+<meta property="article:modified_time" content="2026-10-13T20:25:54.666Z">
+<meta property="article:author" content="圆周率">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://piyuanzhoulv.github.io/image-3.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>[TSCTF-J2026]MazeGarden - 出题人WP</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+  <script>
+    colorScheme = localStorage.getItem('color-scheme') || 'auto';
+    colorScheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+    if(colorScheme==="light"){
+      let classlist = document.querySelector("html").classList;
+      classlist.remove('night');
+      classlist.add('light');
+    }
+    matchMedia('(prefers-color-scheme: dark)').addEventListener("change", ()=>{
+      colorScheme = localStorage.getItem('color-scheme') || 'auto';
+      scheme = colorScheme==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorScheme;
+      if(scheme==='light'){
+        document.getElementById("sun").style.display = "none"
+        document.getElementById("moon").style.display = ""
+        let classlist = document.querySelector("html").classList
+        classlist.remove('night')
+        classlist.add('light')
+      }else{
+        document.getElementById("sun").style.display = ""
+        document.getElementById("moon").style.display = "none"
+        let classlist = document.querySelector("html").classList
+        classlist.add('night')
+        classlist.remove('light')
+      }
+    })
+  </script>
+  <style>
+    @import url("https://fontsapi.zeoseven.com/293/gb-regular/result.css");
+    @import url("https://fontsapi.zeoseven.com/442/main/result.css");
+
+    .night img{
+      opacity: 0.8;
+    }
+
+    img{
+      border: 1px solid;
+    }
+
+    code, pre {
+      font-family: "Maple Mono NF CN", monospace;
+    }
+
+    ::view-transition-image-pair(root) {
+      isolation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+      display: block;
+      transition: none !important;
+    }
+  </style>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr" style="transition: 0.3s;">
+    <a id="extra-logo" class="hide-on-phone" href="/" style="position: fixed; left: 0; top: 0; z-index: 999; margin: 10px; display: flex; align-items: center; text-decoration: none; color: inherit; background: inherit; border: 1px solid; border-radius: 10px; padding-left: 10px; transition: opacity 0.3s;"><img src="/images/logo.png" style="width: 50px; height: 50px; border-radius: 5px;"><h1 class="p-name" style="display: inline; margin: 10px;">圆周率的废纸堆</h1></a>
+    <script>
+      if((localStorage.getItem("extra-logo")||'show')==='none'){
+        document.getElementById("extra-logo").style.display = 'none';
+      }else{
+        document.getElementById("extra-logo").style.display = 'flex';
+      }
+      
+      window.addEventListener("focus", ()=>{
+        if((localStorage.getItem("extra-logo")||'show')==='none'){
+          document.getElementById("extra-logo").style.display = 'none';
+        }else{
+          document.getElementById("extra-logo").style.display = 'flex';
+        }
+      })
+    </script>
+    <div style="position: fixed; right: 0; bottom: 0; z-index: 999; margin: 10px;">
+      <button id="sun" style="border: none; background: none; color:white; cursor: pointer;" onclick="switchColorScheme('light')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"></path></svg></button>
+      <button id="moon" style="border: none; background: none; color: black; cursor: pointer;" onclick="switchColorScheme('night')"><svg style="width: 25px; height: 25px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill="none" d="M0 0h24v24H0z"></path><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg></button>
+    </div>
+    <script>
+      colorSchemeOpt = localStorage.getItem('color-scheme') || 'auto'
+      colorScheme = colorSchemeOpt==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorSchemeOpt
+      if(colorScheme==='light'){
+        document.getElementById("sun").style.display = "none"
+        document.getElementById("moon").style.display = ""
+      }else{
+        document.getElementById("sun").style.display = ""
+        document.getElementById("moon").style.display = "none"
+      }
+      function switchColorScheme4Real(scheme){
+        colorSchemeOpt = scheme
+        localStorage.setItem("color-scheme", scheme)
+        if(scheme==='light'){
+          document.getElementById("sun").style.display = "none"
+          document.getElementById("moon").style.display = ""
+          let classlist = document.querySelector("html").classList
+          classlist.remove('night')
+          classlist.add('light')
+        }else{
+          document.getElementById("sun").style.display = ""
+          document.getElementById("moon").style.display = "none"
+          let classlist = document.querySelector("html").classList
+          classlist.add('night')
+          classlist.remove('light')
+        }
+      }
+      function switchColorScheme(scheme){
+        prefersReducedMotion = localStorage.getItem('reduce-motion') ? {fancy: false, plain: true, media: matchMedia('(prefers-reduced-motion)').matches}[localStorage.getItem('reduce-motion')] : matchMedia('(prefers-reduced-motion)').matches
+        if(!document.startViewTransition || prefersReducedMotion){
+          switchColorScheme4Real(scheme)
+          return
+        }
+        const x = innerWidth
+        const y = innerHeight
+        const endRadius = Math.hypot(
+          Math.max(x, innerWidth - x),
+          Math.max(y, innerHeight - y),
+        )
+        document.startViewTransition(()=>switchColorScheme4Real(scheme)).ready.then(() => {
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0 at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+              ]
+            },
+            {
+              duration: 400,
+              easing: "ease-in",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        })
+      }
+      window.addEventListener("focus", ()=>{
+        const newOpt = localStorage.getItem('color-scheme') || 'auto'
+        if(newOpt !== colorSchemeOpt){
+          colorSchemeOpt = newOpt
+          const scheme = colorSchemeOpt==='auto'?(matchMedia('(prefers-color-scheme: dark)').matches?"night":"light"):colorSchemeOpt
+          if(scheme==='light'){
+            document.getElementById("sun").style.display = "none"
+            document.getElementById("moon").style.display = ""
+            let classlist = document.querySelector("html").classList
+            classlist.remove('night')
+            classlist.add('light')
+          }else{
+            document.getElementById("sun").style.display = ""
+            document.getElementById("moon").style.display = "none"
+            let classlist = document.querySelector("html").classList
+            classlist.add('night')
+            classlist.remove('light')
+          }
+        }
+      })
+    </script>
+    <script>
+      localStorage = localStorage || {getItem: ()=>(undefined)};
+      document.addEventListener("DOMContentLoaded", ()=>{
+        document.querySelectorAll('a[href^="#"]').forEach(elem=>{
+          elem.addEventListener("click", evt=>{
+            if((localStorage.getItem("backbtn-func")||"hook")==="hook"){
+              evt.preventDefault();
+              const anchor = decodeURI(elem.href.slice(elem.href.search('#')));
+              history.replaceState(history.state, null, anchor);
+              document.getElementById(anchor.slice(1)).scrollIntoView({behavior: "smooth"});
+            }
+          })
+        })
+        document.querySelectorAll('a[href^="#"]').forEach(elem=>{
+          elem.addEventListener("click", evt=>{
+            if((localStorage.getItem("backbtn-func")||"hook")!=="hook"){
+              anchorClickCount++;
+            }
+            setTimeout(()=>history.replaceState({anchorClickCount: anchorClickCount}, null, ''), 10);
+          })
+        })
+      })      
+      let anchorClickCount = 0;
+      history.replaceState({anchorClickCount: 0}, null, '');
+      if(localStorage.getItem("backbtn-func")==="session"){
+        function pushHistory(url){
+          let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
+          arr.push(url);
+          sessionStorage.setItem('history', JSON.stringify(arr));
+        }
+        function popHistory(){
+          let arr = JSON.parse(sessionStorage.getItem('history') || '[]');
+          let url = arr.pop() || '/';
+          sessionStorage.setItem('history', JSON.stringify(arr));
+          return url;
+        }
+        if(sessionStorage.getItem('backing')){
+          sessionStorage.removeItem('backing');
+        }else{
+          pushHistory(document.referrer || '/');
+        }
+      }
+    </script>
+    <style>
+      @media screen and (max-width: 1468px) {
+        .hide-on-phone{
+          margin: 0px !important;
+          border-bottom-left-radius: 0px !important;
+          border-top-right-radius: 0px !important;
+          border-top: none !important;
+          border-left: none !important;
+        }
+      }
+    </style>
+    
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/features/">特性修改</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链抽奖机</a></li><!--
+     --><!--
+       --><li><a href="/problems/">每?一题</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2026/10/14/TSCTF-J2026-%E5%9C%86%E5%91%A8%E7%8E%87%E3%81%AE%E5%87%BA%E9%A2%98%E4%BA%BA%E5%8F%8D%E6%80%9D/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2026/10/14/TSCTF-J2026-%E3%83%95%E3%83%A9%E3%82%B0%E3%81%AE%E6%81%8B-%E5%87%BA%E9%A2%98%E4%BA%BAWP/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&text=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&is_video=false&description=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[TSCTF-J2026]MazeGarden - 出题人WP&body=Check out this article: https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&name=[TSCTF-J2026]MazeGarden - 出题人WP&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&t=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%89%8B%E8%A7%86%E8%A7%92"><span class="toc-number">1.</span> <span class="toc-text">选手视角</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E8%8A%B1%E6%8C%87%E4%BB%A4"><span class="toc-number">1.1.</span> <span class="toc-text">处理花指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90setup%E9%80%BB%E8%BE%91"><span class="toc-number">1.2.</span> <span class="toc-text">分析setup逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E4%B8%BB%E9%80%BB%E8%BE%91"><span class="toc-number">1.3.</span> <span class="toc-text">分析主逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E8%BF%B7%E5%AE%AB"><span class="toc-number">1.4.</span> <span class="toc-text">解迷宫</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E9%A2%98%E4%BA%BA%E8%A7%86%E8%A7%92"><span class="toc-number">2.</span> <span class="toc-text">出题人视角</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+      <style>
+        @media screen and (max-width: 630px) {
+          .hide-on-phone{
+            margin: 0 !important;
+            width: 100%;
+            border: none !important;
+            border-radius: 0 !important;
+            border-bottom: gray 1px solid !important;
+          }
+        }
+        @media screen and (max-width: 630px) {
+          #menu{
+            display: none !important;
+          }
+        }
+      </style>
+    
+    <div class="content index py4 ">
+        
+          <!-- <button onclick="" style="border: 1px solid; border-radius: 5px; background: none; color: inherit; font-size: 20px; cursor: pointer; width: fit-content; margin-bottom: 10px; font-family: inherit;">&lt; 返回</button> -->
+          <button id="backbtn" onclick="onBackbtnClick()" style="border: 1px solid; border-radius: 5px; background: none; color: inherit; font-size: 20px; cursor: pointer; width: fit-content; margin-bottom: 10px; font-family: inherit;">&lt; 返回</button>
+          <script>
+            function onBackbtnClick(){
+              switch (localStorage.getItem("backbtn-func")) {
+                case "referer":
+                  location.href = document.referrer || '/';
+                  break;
+
+                case "history":
+                  history.back();
+                  break;
+              
+                case "session":
+                  sessionStorage.setItem('backing', 1);
+                  location.href = popHistory();
+                  break;
+
+                case "count":
+                case "hook":
+                default:
+                  history.go(-1-((history.state || {}).anchorClickCount ?? anchorClickCount ?? 0));
+                  break;
+              }
+            }
+            if(localStorage.getItem("backbtn-func")==="none"){
+              document.getElementById("backbtn").style.display = 'none';
+            }
+          </script>
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        [TSCTF-J2026]MazeGarden - 出题人WP
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">圆周率</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-10-13T20:17:21.000Z" class="dt-published" itemprop="datePublished">2026-10-14</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <!-- # MazeGarden 出题人WriteUp <span style="font-size: 0.6em">by 圆周率</span> -->
+
+<p><a href="MazeGarden - 出题人WP.pdf">点击此处访问PDF版</a></p>
+<h2 id="选手视角"><a href="#选手视角" class="headerlink" title="选手视角"></a>选手视角</h2><h3 id="处理花指令"><a href="#处理花指令" class="headerlink" title="处理花指令"></a>处理花指令</h3><p>拿到可执行文件，先放到IDA里，发现程序加入了花指令干扰反编译，还有控制流平坦化，下面先处理花指令</p>
+<p>简单手动patch几处后，发现花指令实在太多了，这里就需要我们写一个脚本去patch花指令，下面是花指令的几种类型：</p>
+<ul>
+<li>直接跳转：jmp + junk</li>
+<li>互补跳转：jz + jnz + junk</li>
+<li>清零跳转：xor A, A + jz + junk</li>
+<li>比较跳转：cmp A, A + jz + junk</li>
+<li>重叠跳转：jmp short near ptr $+1 (EB FF)</li>
+</ul>
+<p>其中直接跳转可以被IDA识别跳过，我们主要处理后面这几类：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ida_bytes</span><br><span class="line"><span class="keyword">import</span> ida_ida</span><br><span class="line"><span class="keyword">import</span> ida_idaapi</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch_jzjnz</span>(<span class="params">addr</span>):</span><br><span class="line">    A = ida_bytes.get_byte(addr+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">if</span> ida_bytes.get_byte(addr+<span class="number">3</span>) != A-<span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(addr, addr+A+<span class="number">2</span>):</span><br><span class="line">        ida_bytes.patch_byte(i, <span class="number">0x90</span>)</span><br><span class="line"></span><br><span class="line">RRMR = [<span class="number">0xC0</span>, <span class="number">0xC9</span>, <span class="number">0xD2</span>, <span class="number">0xDB</span>, <span class="number">0xE4</span>, <span class="number">0xED</span>, <span class="number">0xF6</span>, <span class="number">0xFF</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch_xorjz</span>(<span class="params">addr</span>):</span><br><span class="line">    A = ida_bytes.get_byte(addr+<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> ida_bytes.get_byte(addr+<span class="number">1</span>) <span class="keyword">not</span> <span class="keyword">in</span> RRMR:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(addr, addr+A+<span class="number">4</span>):</span><br><span class="line">        ida_bytes.patch_byte(i, <span class="number">0x90</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch_cmpjz</span>(<span class="params">addr</span>):</span><br><span class="line">    A = ida_bytes.get_byte(addr+<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> ida_bytes.get_byte(addr+<span class="number">1</span>) <span class="keyword">not</span> <span class="keyword">in</span> RRMR:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(addr, addr+A+<span class="number">4</span>):</span><br><span class="line">        ida_bytes.patch_byte(i, <span class="number">0x90</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch_EBFF</span>(<span class="params">addr</span>):</span><br><span class="line">    <span class="keyword">if</span> (ida_bytes.get_byte(addr+<span class="number">2</span>) &amp; <span class="number">0xF0</span>) == <span class="number">0xC0</span>:</span><br><span class="line">        ida_bytes.patch_byte(addr, <span class="number">0x90</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch</span>(<span class="params">start, end=<span class="literal">None</span></span>):</span><br><span class="line">    PATS = [</span><br><span class="line">        (<span class="string">&quot;74 ?? 75&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;72 ?? 73&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;70 ?? 71&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;7C ?? 7D&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;7F ?? 7E&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;77 ?? 76&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;78 ?? 79&quot;</span>, patch_jzjnz),</span><br><span class="line">        (<span class="string">&quot;31 ?? 74&quot;</span>, patch_xorjz),</span><br><span class="line">        (<span class="string">&quot;39 ?? 73&quot;</span>, patch_xorjz),</span><br><span class="line">        (<span class="string">&quot;39 ?? 74&quot;</span>, patch_xorjz),</span><br><span class="line">        (<span class="string">&quot;39 ?? 76&quot;</span>, patch_xorjz),</span><br><span class="line">        (<span class="string">&quot;EB FF&quot;</span>, patch_EBFF)</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">x</span>):</span><br><span class="line">        out = ida_bytes.compiled_binpat_vec_t()</span><br><span class="line">        ida_bytes.parse_binpat_str(out, start, x[<span class="number">0</span>], <span class="number">16</span>)</span><br><span class="line">        <span class="keyword">return</span> (ida_bytes.bin_search(start, end <span class="keyword">or</span> ida_ida.inf_get_max_ea(), out, ida_bytes.BIN_SEARCH_FORWARD), x[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    pats = <span class="built_in">list</span>(<span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x[<span class="number">0</span>] != ida_idaapi.BADADDR, <span class="built_in">map</span>(search, PATS)))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> pats:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    (addr, _), func = <span class="built_in">min</span>(pats, key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">if</span> end <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> addr &gt; end:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    func(addr)</span><br><span class="line">    patch(addr+<span class="number">1</span>, end)</span><br><span class="line"></span><br><span class="line">patch(<span class="number">0x140001000</span>, <span class="number">0x140003F49</span>)</span><br><span class="line">patch(<span class="number">0x140004160</span>, <span class="number">0x14000F043</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在IDA中运行patch脚本之后就可以把所有花去除，对加花的两个函数全部执行Undefine（U），然后再在函数开头按P定义重新定义函数，此时F5功能就可以正常使用</p>
+<p>如果你的IDA加载了hrtng插件，那么就会自动去平坦化，可以看到一个比较清晰的逻辑，但由于计算混淆的存在，还是有一部分运算不够清楚，可以尝试使用D810插件（较慢），可以恢复一部分，该插件也可以去平坦化</p>
+<h3 id="分析setup逻辑"><a href="#分析setup逻辑" class="headerlink" title="分析setup逻辑"></a>分析setup逻辑</h3><p>这里有两个核心函数：<code>main</code>和<code>sub_140004160</code>，其中<code>sub_140004160</code>为初始化函数（下称<code>setup</code>函数），其中包含我们需要的地图，但是由于其逻辑较为复杂，我们可以考虑动调</p>
+<p>先分析看看，其中大量执行了<code>sub_1400040E0</code>函数，其返回值为unsigned int，进入，发现该函数为一个LCG随机数生成器，初始seed为<code>0x12345678</code>，反馈为<code>0xDEADBEEF * x + 0xCAFEBABE</code>，然后该函数返回值进行一同运算后作为复制字符串的目的偏移，其中部分运算被D810正确复原，还有少量形式如下的运算：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((~((_BYTE)v6 - <span class="number">25</span>) &amp; <span class="number">0x29</span>) * ((v6 - <span class="number">1219732249</span>) &amp; <span class="number">0xFFFFFFD6</span>) + (((_BYTE)v6 - <span class="number">25</span>) &amp; <span class="number">0x29</span>) * ((v6 - <span class="number">1219732249</span>) | <span class="number">0x29</span>) + v1515)</span><br></pre></td></tr></table></figure>
+
+<p>其中v6为lcg返回值，v1515为存储字符串之处，交给D老师简化一下：</p>
+<p><img src="/image-3.png" alt="alt text"></p>
+<p>这与其他表达式形式一致，可以采信，所以我们只需要提取<code>v??? - [OFFSET]</code>即可还原为<code>41*(lcg()-[OFFSET]) + 字符串地址</code>，这一点可以通过设计Regex表达式，逐行对伪代码匹配实现恢复迷宫文本</p>
+<p>由于过于复杂，下面采用动调的方式提取</p>
+<p>首先，注意到导入表内含有<code>IsDebuggerPresent</code>函数，说明极有可能含有反调试代码，经过交叉应用，发现<code>setup</code>函数中含有一个根据该值的分支语句，接下来的策略是：</p>
+<ol>
+<li><p>将跳转指令NOP掉&#x2F;设为强制跳转，或在该处下断点，根据实时反馈的跳转方向进行<code>Set IP</code></p>
+</li>
+<li><p>先正常运行程序，待程序运行至I&#x2F;O时，初始化已完成，此时使用IDA attach程序进行调试</p>
+</li>
+</ol>
+<p> 随后就可以提取得到迷宫</p>
+<h3 id="分析主逻辑"><a href="#分析主逻辑" class="headerlink" title="分析主逻辑"></a>分析主逻辑</h3><p>主逻辑的部分运算也被混淆了，可以通过D810还原</p>
+<p><img src="/image-4.png" alt="alt text"></p>
+<p>先把部分数字转为ASCII，接下来就对逻辑进行一个分析</p>
+<p>首先是while的条件，很明显是终点条件，由此可以判断要求相同的两项为x&#x2F;y，另一个为z，要求上有n、l，结合下方代码可以分辨x、y，对这些变量进行重命名</p>
+<p>最后的输出是记录的路径，由此可以得到路径的变量和偏移量变量，命名为step、i</p>
+<p>此外经常访问的一个变量肯定是地图的指针，命名为map</p>
+<p>etc.</p>
+<p>命名后代码如下（手动删除无关变量）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The function seems has been flattened</span></span><br><span class="line"><span class="type">int</span> __fastcall <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  _BYTE out[<span class="number">31</span>]; <span class="comment">// [rsp+3A0h] [rbp-488h] BYREF</span></span><br><span class="line">  <span class="type">char</span> input; <span class="comment">// [rsp+3BFh] [rbp-469h]</span></span><br><span class="line">  __int64 n; <span class="comment">// [rsp+3C0h] [rbp-468h] BYREF</span></span><br><span class="line">  __int64 l; <span class="comment">// [rsp+3C8h] [rbp-460h]</span></span><br><span class="line">  <span class="type">char</span> *<span class="built_in">map</span>; <span class="comment">// [rsp+3D0h] [rbp-458h]</span></span><br><span class="line">  __int64 x; <span class="comment">// [rsp+3D8h] [rbp-450h]</span></span><br><span class="line">  __int64 y; <span class="comment">// [rsp+3E0h] [rbp-448h]</span></span><br><span class="line">  __int64 z; <span class="comment">// [rsp+3E8h] [rbp-440h]</span></span><br><span class="line">  __int64 i; <span class="comment">// [rsp+3F0h] [rbp-438h]</span></span><br><span class="line">  _BYTE step[<span class="number">1004</span>]; <span class="comment">// [rsp+3F8h] [rbp-430h] BYREF</span></span><br><span class="line"></span><br><span class="line">  sub_140004160(&amp;n);</span><br><span class="line">  <span class="keyword">while</span> ( x != n - <span class="number">2</span> || y != x || z != l - <span class="number">1</span> )</span><br><span class="line">  &#123;</span><br><span class="line">    input = fgetchar();</span><br><span class="line">    <span class="keyword">if</span> ( input &lt; <span class="string">&#x27;k&#x27;</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( input &lt; <span class="string">&#x27;d&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">if</span> ( input == <span class="string">&#x27;a&#x27;</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          --x;</span><br><span class="line">          <span class="keyword">if</span> ( <span class="built_in">map</span>[n * y + n * z * n + x] == <span class="string">&#x27;#&#x27;</span> )</span><br><span class="line">          &#123;</span><br><span class="line">            ++x;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span> <span class="keyword">if</span> ( i &amp;&amp; step[i - <span class="number">1</span>] == <span class="string">&#x27;d&#x27;</span> )</span><br><span class="line">          &#123;</span><br><span class="line">            --i;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">          &#123;</span><br><span class="line">            step[i++] = input;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( input &lt; <span class="string">&#x27;i&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">if</span> ( input == <span class="string">&#x27;d&#x27;</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          ++x;</span><br><span class="line">          <span class="keyword">if</span> ( <span class="built_in">map</span>[x + n * y + n * n * z] == <span class="string">&#x27;#&#x27;</span> )</span><br><span class="line">          &#123;</span><br><span class="line">            --x;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">          &#123;</span><br><span class="line">            <span class="keyword">if</span> ( i &amp;&amp; step[i - <span class="number">1</span>] == <span class="string">&#x27;a&#x27;</span> )</span><br><span class="line">            &#123;</span><br><span class="line">              --i;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">              step[i] = input;</span><br><span class="line">              i = <span class="number">2</span> * (i &amp; <span class="number">1</span>) + (i ^ <span class="number">1</span>);  <span class="comment">// ++i;</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( input == <span class="string">&#x27;i&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">if</span> ( <span class="built_in">map</span>[x + n * z * n + n * y] == <span class="string">&#x27;^&#x27;</span> || <span class="built_in">map</span>[x + n * y + n * n * z] == <span class="string">&#x27;X&#x27;</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          --z;</span><br><span class="line">          <span class="keyword">if</span> ( i &amp;&amp; step[i - <span class="number">1</span>] == <span class="string">&#x27;k&#x27;</span> )</span><br><span class="line">            i = <span class="number">2</span> * i + ~i;  <span class="comment">// --i;</span></span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">            step[i++] = input;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( input &lt; <span class="string">&#x27;s&#x27;</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( input == <span class="string">&#x27;k&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">if</span> ( <span class="built_in">map</span>[x + n * z * n + n * y] == <span class="string">&#x27;v&#x27;</span> || <span class="built_in">map</span>[y * n + n * z * n + x] == <span class="string">&#x27;X&#x27;</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          z = (z | <span class="number">1</span>) + (z &amp; <span class="number">1</span>);  <span class="comment">// ++z;</span></span><br><span class="line">          <span class="keyword">if</span> ( i &amp;&amp; step[i - <span class="number">1</span>] == <span class="string">&#x27;i&#x27;</span> )</span><br><span class="line">            --i;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">            step[i++] = input;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( input &lt; <span class="string">&#x27;w&#x27;</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( input == <span class="string">&#x27;s&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        ++y;</span><br><span class="line">        <span class="keyword">if</span> ( <span class="built_in">map</span>[x + n * z * n + n * y] == <span class="string">&#x27;#&#x27;</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          --y;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ( i &amp;&amp; step[i - <span class="number">1</span>] == <span class="string">&#x27;w&#x27;</span> )</span><br><span class="line">        &#123;</span><br><span class="line">          --i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">          step[i++] = input;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ( input == <span class="string">&#x27;w&#x27;</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( <span class="built_in">map</span>[x + n * n * z + n * y] == <span class="string">&#x27;#&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        ++y;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> ( i &amp;&amp; step[i - <span class="number">1</span>] == <span class="string">&#x27;s&#x27;</span> )</span><br><span class="line">      &#123;</span><br><span class="line">        --i;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        step[i++] = input;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  step[i] = <span class="number">0</span>;</span><br><span class="line">  sub_140010B00(step, out);</span><br><span class="line">  sub_140003F50(</span><br><span class="line">    <span class="string">&quot;Congratulations! The flag is: TSCTF-J&#123;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x&#125;&quot;</span>,</span><br><span class="line">    out[<span class="number">0</span>],</span><br><span class="line">    out[<span class="number">1</span>],</span><br><span class="line">    out[<span class="number">2</span>],</span><br><span class="line">    out[<span class="number">3</span>],</span><br><span class="line">    out[<span class="number">4</span>],</span><br><span class="line">    out[<span class="number">5</span>],</span><br><span class="line">    out[<span class="number">6</span>],</span><br><span class="line">    out[<span class="number">7</span>],</span><br><span class="line">    out[<span class="number">8</span>],</span><br><span class="line">    out[<span class="number">9</span>],</span><br><span class="line">    out[<span class="number">10</span>],</span><br><span class="line">    out[<span class="number">11</span>],</span><br><span class="line">    out[<span class="number">12</span>],</span><br><span class="line">    out[<span class="number">13</span>],</span><br><span class="line">    out[<span class="number">14</span>],</span><br><span class="line">    out[<span class="number">15</span>]);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来逻辑就非常清晰了，可以很清晰看出 $\operatorname{pos2index}(x, y, z) &#x3D; x + n \times y + n^2 \times z$ ，墙为#，^上，v下，X上下，移动为</p>
+<table>
+<thead>
+<tr>
+<th align="center">按键</th>
+<th align="center">方向</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">a</td>
+<td align="center">x-</td>
+</tr>
+<tr>
+<td align="center">d</td>
+<td align="center">x+</td>
+</tr>
+<tr>
+<td align="center">w</td>
+<td align="center">y-</td>
+</tr>
+<tr>
+<td align="center">s</td>
+<td align="center">y+</td>
+</tr>
+<tr>
+<td align="center">i</td>
+<td align="center">z-</td>
+</tr>
+<tr>
+<td align="center">k</td>
+<td align="center">z+</td>
+</tr>
+</tbody></table>
+<p>这里还有一个<code>sub_140010B00</code>需要分析，点进去随便看看，发现一串常数：</p>
+<p><img src="/image-5.png" alt="alt text"></p>
+<p>无疑，这是一个MD5算法</p>
+<p>最后就是编写算法，得到迷宫走法</p>
+<h3 id="解迷宫"><a href="#解迷宫" class="headerlink" title="解迷宫"></a>解迷宫</h3><p>接下来就写一个算法求解提取出来的迷宫：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">maze = <span class="built_in">open</span>(<span class="string">&#x27;maze.txt&#x27;</span>).read().strip()</span><br><span class="line"></span><br><span class="line">N = <span class="number">41</span></span><br><span class="line">L = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">pos2index = <span class="keyword">lambda</span> x, y, z: x + N*y + N*N*z</span><br><span class="line"></span><br><span class="line">visited = &#123;(<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>)&#125;</span><br><span class="line">queue = [((<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>), <span class="string">&#x27;&#x27;</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>(<span class="params">x, y, z, p</span>):</span><br><span class="line">    <span class="keyword">if</span> (x, y, z) <span class="keyword">in</span> visited:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    visited.add((x, y, z))</span><br><span class="line">    queue.append(((x, y, z), p))</span><br><span class="line">    <span class="keyword">if</span> (x, y, z) == (N-<span class="number">2</span>, N-<span class="number">2</span>, L-<span class="number">1</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;Found path:&#x27;</span>, p)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;Congratulations! The flag is: TSCTF-J&#123;&#123;<span class="subst">&#123;<span class="built_in">__import__</span>(<span class="string">&#x27;hashlib&#x27;</span>).md5(p.encode()).hexdigest()&#125;</span>&#125;&#125;&#x27;</span>)</span><br><span class="line">        exit()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> queue:</span><br><span class="line">    pos, path = queue.pop(<span class="number">0</span>)</span><br><span class="line">    (x, y, z) = pos</span><br><span class="line">    <span class="keyword">if</span> maze[pos2index(*pos)] == <span class="string">&#x27;X&#x27;</span>:</span><br><span class="line">        add(x, y, z+<span class="number">1</span>, path+<span class="string">&#x27;k&#x27;</span>)</span><br><span class="line">        add(x, y, z-<span class="number">1</span>, path+<span class="string">&#x27;i&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> maze[pos2index(*pos)] == <span class="string">&#x27;v&#x27;</span>:</span><br><span class="line">        add(x, y, z+<span class="number">1</span>, path+<span class="string">&#x27;k&#x27;</span>)</span><br><span class="line">    <span class="keyword">elif</span> maze[pos2index(*pos)] == <span class="string">&#x27;^&#x27;</span>:</span><br><span class="line">        add(x, y, z-<span class="number">1</span>, path+<span class="string">&#x27;i&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> maze[pos2index(x+<span class="number">1</span>, y, z)] != <span class="string">&#x27;#&#x27;</span>:</span><br><span class="line">        add(x+<span class="number">1</span>, y, z, path+<span class="string">&#x27;d&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> maze[pos2index(x-<span class="number">1</span>, y, z)] != <span class="string">&#x27;#&#x27;</span>:</span><br><span class="line">        add(x-<span class="number">1</span>, y, z, path+<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> maze[pos2index(x, y+<span class="number">1</span>, z)] != <span class="string">&#x27;#&#x27;</span>:</span><br><span class="line">        add(x, y+<span class="number">1</span>, z, path+<span class="string">&#x27;s&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> maze[pos2index(x, y-<span class="number">1</span>, z)] != <span class="string">&#x27;#&#x27;</span>:</span><br><span class="line">        add(x, y-<span class="number">1</span>, z, path+<span class="string">&#x27;w&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>就可以得到flag了，如果担心MD5遭到了魔改，可以把答案路径输入到程序中，程序就会输出正确flag（所以其实不分析这个函数也是可以做的）</p>
+<p><img src="/image-6.png" alt="alt text"></p>
+<p><img src="/image-7.png" alt="alt text"></p>
+<h2 id="出题人视角"><a href="#出题人视角" class="headerlink" title="出题人视角"></a>出题人视角</h2><p>首先这道题主要考察花指令和控制流平坦化的去除</p>
+<p>因为本人对控制流平坦化的去除不太熟悉，所以就出的比较简单，重点在花指令</p>
+<p>花指令是让D老师根据我总结的写了4大类56种花，同时我写了一段代码用来向源码的<em>每一行</em>加入一个花指令，所以花指令的量比较大，需要写脚本patch</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(sys.argv) &lt; <span class="number">2</span>:</span><br><span class="line">    exit(-<span class="number">1</span>)</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">random.seed(<span class="number">114514</span>)</span><br><span class="line">lines = []</span><br><span class="line">depth = <span class="number">0</span></span><br><span class="line">switch = <span class="literal">False</span></span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(sys.argv[<span class="number">1</span>], encoding=<span class="string">&#x27;utf-8&#x27;</span>):</span><br><span class="line">    lines.append(line)</span><br><span class="line">    depth += line.count(<span class="string">&#x27;&#123;&#x27;</span>) - line.count(<span class="string">&#x27;&#125;&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;switch&#x27;</span> <span class="keyword">in</span> line:</span><br><span class="line">        switch = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="string">&#x27;case&#x27;</span> <span class="keyword">in</span> line:</span><br><span class="line">        switch = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> switch <span class="keyword">and</span> depth &gt;= <span class="number">1</span> <span class="keyword">and</span> random.random() &lt;= <span class="number">1</span>:</span><br><span class="line">        lines.append(<span class="string">&#x27;    &#x27;</span>*depth+<span class="string">&#x27;FLOWER();\n&#x27;</span>)</span><br><span class="line">content = <span class="string">&#x27;&#x27;</span>.join(lines)</span><br><span class="line">flowers = <span class="built_in">list</span>(<span class="built_in">map</span>(<span class="keyword">lambda</span> x: x.split(<span class="string">&#x27;\n&#x27;</span>), <span class="built_in">open</span>(<span class="string">&#x27;flowers&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>).read().split(<span class="string">&#x27;\n\n&#x27;</span>)))</span><br><span class="line">to_add = [random.choice(fs) <span class="keyword">for</span> fs <span class="keyword">in</span> flowers][:content.count(<span class="string">&quot;FLOWER();&quot;</span>)]</span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(to_add) &lt; content.count(<span class="string">&quot;FLOWER();&quot;</span>):</span><br><span class="line">    to_add.extend(random.choice(random.choice(flowers)) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(content.count(<span class="string">&quot;FLOWER();&quot;</span>)-<span class="built_in">len</span>(to_add)))</span><br><span class="line">random.shuffle(to_add)</span><br><span class="line">i = -<span class="number">1</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add_flower</span>(<span class="params">*_</span>):</span><br><span class="line">    <span class="keyword">global</span> i</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> to_add[i].replace(<span class="string">&quot;[JUNK]&quot;</span>, <span class="string">&#x27;, &#x27;</span>.join(<span class="built_in">hex</span>(random.randint(<span class="number">0</span>, <span class="number">0xff</span>)) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(random.randint(<span class="number">2</span>, <span class="number">8</span>))))</span><br><span class="line"><span class="built_in">open</span>(sys.argv[<span class="number">1</span>].removesuffix(<span class="string">&#x27;.c&#x27;</span>)+<span class="string">&#x27;.flowered.c&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>).write(re.sub(<span class="string">r&#x27;FLOWER\(\);&#x27;</span>, add_flower, content))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image-8.png" alt="alt text"></p>
+<p><del>（也就将近500朵吧）</del></p>
+<p>ollvm使用的是<a target="_blank" rel="noopener" href="https://github.com/ollvm-adaplite/ollvm-clang">ollvm-adaplite&#x2F;ollvm-clang</a>，不过这个似乎被魔改了，我只启用了控制流平坦化、表达式混淆和一个不知道有没有用的基本块分割</p>
+<p>迷宫本来是想写一个与<a target="_blank" rel="noopener" href="https://github.com/PiYuanZhouLv/BouncingMaze">BouncingMaze</a>相匹配的算法来着，但是由于这个出题程序含有bug，偶发多解现象，但是代码又是史山几托，就懒得改了，顺手写了一个3D迷宫，下面是核心逻辑的源码，以供参考：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;md5.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;gameType.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> getIndex(game) \</span></span><br><span class="line"><span class="meta">    (game.z * game.maze.n * game.maze.n + game.y * game.maze.n + game.x)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> endGame(game) \</span></span><br><span class="line"><span class="meta">    (game.x == game.maze.n - 2 &amp;&amp; game.y == game.x &amp;&amp; game.z == game.maze.l - 1)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">void</span> <span class="title function_">setupGame</span><span class="params">(Game*)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    Game game;</span><br><span class="line">    setupGame(&amp;game);</span><br><span class="line">    <span class="keyword">while</span> (!endGame(game)) &#123;</span><br><span class="line">        <span class="type">char</span> d = getchar();</span><br><span class="line">        <span class="keyword">switch</span> (d) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;a&#x27;</span>:</span><br><span class="line">                game.x--;</span><br><span class="line">                <span class="keyword">if</span> (game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;#&#x27;</span>) &#123;</span><br><span class="line">                    game.x++;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (game.i &gt; <span class="number">0</span> &amp;&amp; game.step[game.i - <span class="number">1</span>] == <span class="string">&#x27;d&#x27;</span>) &#123;</span><br><span class="line">                        game.i--;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        game.step[game.i] = d;</span><br><span class="line">                        game.i++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;d&#x27;</span>:</span><br><span class="line">                game.x++;</span><br><span class="line">                <span class="keyword">if</span> (game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;#&#x27;</span>) &#123;</span><br><span class="line">                    game.x--;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (game.i &gt; <span class="number">0</span> &amp;&amp; game.step[game.i - <span class="number">1</span>] == <span class="string">&#x27;a&#x27;</span>) &#123;</span><br><span class="line">                        game.i--;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        game.step[game.i] = d;</span><br><span class="line">                        game.i++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;w&#x27;</span>:</span><br><span class="line">                game.y--;</span><br><span class="line">                <span class="keyword">if</span> (game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;#&#x27;</span>) &#123;</span><br><span class="line">                    game.y++;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (game.i &gt; <span class="number">0</span> &amp;&amp; game.step[game.i - <span class="number">1</span>] == <span class="string">&#x27;s&#x27;</span>) &#123;</span><br><span class="line">                        game.i--;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        game.step[game.i] = d;</span><br><span class="line">                        game.i++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>:</span><br><span class="line">                game.y++;</span><br><span class="line">                <span class="keyword">if</span> (game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;#&#x27;</span>) &#123;</span><br><span class="line">                    game.y--;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (game.i &gt; <span class="number">0</span> &amp;&amp; game.step[game.i - <span class="number">1</span>] == <span class="string">&#x27;w&#x27;</span>) &#123;</span><br><span class="line">                        game.i--;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        game.step[game.i] = d;</span><br><span class="line">                        game.i++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;i&#x27;</span>:</span><br><span class="line">                <span class="keyword">if</span> (game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;^&#x27;</span> || game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;X&#x27;</span>) &#123;</span><br><span class="line">                    game.z--;</span><br><span class="line">                    <span class="keyword">if</span> (game.i &gt; <span class="number">0</span> &amp;&amp; game.step[game.i - <span class="number">1</span>] == <span class="string">&#x27;k&#x27;</span>) &#123;</span><br><span class="line">                        game.i--;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        game.step[game.i] = d;</span><br><span class="line">                        game.i++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;k&#x27;</span>:</span><br><span class="line">                <span class="keyword">if</span> (game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;v&#x27;</span> || game.maze.<span class="built_in">map</span>[getIndex(game)] == <span class="string">&#x27;X&#x27;</span>) &#123;</span><br><span class="line">                    game.z++;</span><br><span class="line">                    <span class="keyword">if</span> (game.i &gt; <span class="number">0</span> &amp;&amp; game.step[game.i - <span class="number">1</span>] == <span class="string">&#x27;i&#x27;</span>) &#123;</span><br><span class="line">                        game.i--;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        game.step[game.i] = d;</span><br><span class="line">                        game.i++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    game.step[game.i] = <span class="number">0</span>;</span><br><span class="line">    <span class="type">uint8_t</span> out[<span class="number">16</span>];</span><br><span class="line">    md5String(game.step, out);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Congratulations! The flag is: TSCTF-J&#123;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x&#125;&quot;</span>, out[<span class="number">0</span>], out[<span class="number">1</span>], out[<span class="number">2</span>], out[<span class="number">3</span>], out[<span class="number">4</span>], out[<span class="number">5</span>], out[<span class="number">6</span>], out[<span class="number">7</span>], out[<span class="number">8</span>], out[<span class="number">9</span>], out[<span class="number">10</span>], out[<span class="number">11</span>], out[<span class="number">12</span>], out[<span class="number">13</span>], out[<span class="number">14</span>], out[<span class="number">15</span>]);  <span class="comment">// 希望计导老师看到这行代码不会来砍我（x</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<script>
+  // 修复图炸的情况
+  (new Array(...document.getElementsByTagName('img'))).forEach(
+      img=>{
+          if(img.src.split('/')[3]!='images'&&!img.src.startsWith(location.href.split("#")[0])){
+              console.log(`"${decodeURI(img.src.split('/').slice(-1))}" 貌似炸了`)
+              img.src=img.src.split('/').slice(-1)
+          }
+  })
+</script>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/features/">特性修改</a></li>
+        
+          <li><a href="/friends/">友链抽奖机</a></li>
+        
+          <li><a href="/problems/">每?一题</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%89%E6%89%8B%E8%A7%86%E8%A7%92"><span class="toc-number">1.</span> <span class="toc-text">选手视角</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E8%8A%B1%E6%8C%87%E4%BB%A4"><span class="toc-number">1.1.</span> <span class="toc-text">处理花指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90setup%E9%80%BB%E8%BE%91"><span class="toc-number">1.2.</span> <span class="toc-text">分析setup逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E4%B8%BB%E9%80%BB%E8%BE%91"><span class="toc-number">1.3.</span> <span class="toc-text">分析主逻辑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E8%BF%B7%E5%AE%AB"><span class="toc-number">1.4.</span> <span class="toc-text">解迷宫</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E9%A2%98%E4%BA%BA%E8%A7%86%E8%A7%92"><span class="toc-number">2.</span> <span class="toc-text">出题人视角</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&text=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&is_video=false&description=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=[TSCTF-J2026]MazeGarden - 出题人WP&body=Check out this article: https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&title=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&name=[TSCTF-J2026]MazeGarden - 出题人WP&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://piyuanzhoulv.github.io/2026/10/14/TSCTF-J2026-MazeGarden-%E5%87%BA%E9%A2%98%E4%BA%BAWP/&t=[TSCTF-J2026]MazeGarden - 出题人WP"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025-2026
+    圆周率
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/features/">特性修改</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链抽奖机</a></li><!--
+     --><!--
+       --><li><a href="/problems/">每?一题</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/PiYuanZhouLv">Github</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
